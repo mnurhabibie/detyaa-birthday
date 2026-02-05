@@ -1,493 +1,90 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Flame } from "lucide-react";
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday Detya ✨</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="scene" id="scene" aria-label="Night birthday scene">
+    <!-- Layers -->
+    <div class="bg"></div>
+    <div class="stars" id="stars" aria-hidden="true"></div>
+    <div class="moon" aria-hidden="true"></div>
+    <div class="moon-glow" aria-hidden="true"></div>
 
-/**
- * Single-file interactive birthday page (Ghibli-inspired night vibe).
- * - Starry sky + gentle parallax
- * - Flame button triggers fireworks + reveal message
- * - Canvas-based fireworks (no external deps)
- */
-
-// ---------- Fireworks Engine ----------
-class Particle {
-  constructor(x, y, vx, vy, life, color, size) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
-    this.vy = vy;
-    this.life = life;
-    this.maxLife = life;
-    this.color = color;
-    this.size = size;
-    this.gravity = 0.06;
-    this.drag = 0.985;
-  }
-  step() {
-    this.vx *= this.drag;
-    this.vy = this.vy * this.drag + this.gravity;
-    this.x += this.vx;
-    this.y += this.vy;
-    this.life -= 1;
-  }
-  alpha() {
-    return Math.max(0, Math.min(1, this.life / this.maxLife));
-  }
-}
-
-function rand(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function createBurst(x, y, count) {
-  const palette = [
-    "#ffd166", // warm gold
-    "#ff8fab", // rosy
-    "#7bdff2", // sky
-    "#caffbf", // mint
-    "#bdb2ff", // lavender
-    "#ffadad", // soft red
-  ];
-
-  const particles = [];
-  for (let i = 0; i < count; i++) {
-    const angle = rand(0, Math.PI * 2);
-    const speed = rand(1.2, 4.4) * (Math.random() < 0.12 ? 1.7 : 1);
-    const vx = Math.cos(angle) * speed;
-    const vy = Math.sin(angle) * speed;
-    const life = Math.floor(rand(45, 95));
-    const size = rand(1.2, 2.6);
-    particles.push(new Particle(x, y, vx, vy, life, pick(palette), size));
-  }
-  return particles;
-}
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setReduced(!!mq.matches);
-    onChange();
-    mq.addEventListener?.("change", onChange);
-    return () => mq.removeEventListener?.("change", onChange);
-  }, []);
-  return reduced;
-}
-
-export default function BirthdayGhibliNight() {
-  const canvasRef = useRef(null);
-  const rafRef = useRef(0);
-  const particlesRef = useRef([]);
-  const lastBurstRef = useRef(0);
-
-  const [armed, setArmed] = useState(false);
-  const [celebrate, setCelebrate] = useState(false);
-  const [seed, setSeed] = useState(0); // re-render stars subtly
-
-  const reducedMotion = usePrefersReducedMotion();
-
-  // Star field
-  const stars = useMemo(() => {
-    const n = 110;
-    const s = [];
-    for (let i = 0; i < n; i++) {
-      s.push({
-        x: Math.random() * 100,
-        y: Math.random() * 70,
-        r: rand(0.6, 1.8),
-        o: rand(0.35, 0.95),
-        tw: rand(2.2, 6.5),
-        d: rand(0, 4),
-      });
-    }
-    return s;
-  }, [seed]);
-
-  // Resize canvas to device pixels
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const resize = () => {
-      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = Math.floor(rect.width * dpr);
-      canvas.height = Math.floor(rect.height * dpr);
-      const ctx = canvas.getContext("2d");
-      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-
-  // Animation loop
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const tick = (t) => {
-      rafRef.current = requestAnimationFrame(tick);
-
-      const w = canvas.getBoundingClientRect().width;
-      const h = canvas.getBoundingClientRect().height;
-
-      // fade trail
-      ctx.clearRect(0, 0, w, h);
-
-      const parts = particlesRef.current;
-      for (let i = parts.length - 1; i >= 0; i--) {
-        const p = parts[i];
-        p.step();
-        const a = p.alpha();
-        if (p.life <= 0 || p.x < -50 || p.x > w + 50 || p.y > h + 80) {
-          parts.splice(i, 1);
-          continue;
-        }
-        ctx.globalAlpha = a;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-
-      // auto-stop once calm
-      if (celebrate && parts.length === 0 && Date.now() - lastBurstRef.current > 900) {
-        setCelebrate(false);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [celebrate]);
-
-  const burstAt = (x, y, intensity = 1) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const bx = Math.max(20, Math.min(rect.width - 20, x));
-    const by = Math.max(20, Math.min(rect.height - 160, y));
-
-    const count = Math.floor(70 * intensity);
-    particlesRef.current.push(...createBurst(bx, by, count));
-    lastBurstRef.current = Date.now();
-  };
-
-  const triggerShow = () => {
-    if (reducedMotion) {
-      setArmed(true);
-      setCelebrate(false);
-      return;
-    }
-
-    setArmed(true);
-    setCelebrate(true);
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-
-    // Multiple bursts for a "wow" effect
-    const bursts = [
-      { dx: 0.25, dy: 0.34, i: 1.2 },
-      { dx: 0.62, dy: 0.28, i: 1.1 },
-      { dx: 0.48, dy: 0.40, i: 1.35 },
-      { dx: 0.35, dy: 0.22, i: 0.95 },
-      { dx: 0.72, dy: 0.38, i: 1.0 },
-    ];
-
-    let k = 0;
-    const fire = () => {
-      const b = bursts[k];
-      burstAt(rect.width * b.dx, rect.height * b.dy, b.i);
-      k += 1;
-      if (k < bursts.length) setTimeout(fire, 180);
-    };
-    fire();
-
-    // subtle star re-seed
-    setTimeout(() => setSeed((s) => s + 1), 500);
-  };
-
-  // Click anywhere for extra burst once armed
-  const onSceneClick = (e) => {
-    if (!armed || reducedMotion) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    burstAt(x, y, 0.85);
-    setCelebrate(true);
-  };
-
-  return (
-    <div className="min-h-screen w-full bg-slate-950 text-white overflow-hidden">
-      {/* Background */}
-      <div
-        className="relative min-h-screen w-full"
-        onClick={onSceneClick}
-        role="presentation"
-      >
-        {/* Night gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/60 to-slate-950" />
-
-        {/* Stars */}
-        <div className="absolute inset-0">
-          {stars.map((s, idx) => (
-            <motion.span
-              key={`${seed}-${idx}`}
-              className="absolute rounded-full bg-white"
-              style={{
-                left: `${s.x}%`,
-                top: `${s.y}%`,
-                width: `${s.r}px`,
-                height: `${s.r}px`,
-                opacity: s.o,
-                filter: "drop-shadow(0 0 6px rgba(255,255,255,0.25))",
-              }}
-              animate={
-                reducedMotion
-                  ? { opacity: s.o }
-                  : {
-                      opacity: [s.o * 0.6, s.o, s.o * 0.65],
-                    }
-              }
-              transition={{
-                duration: s.tw,
-                repeat: Infinity,
-                delay: s.d,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Moon */}
-        <motion.div
-          className="absolute -top-10 -right-10 h-56 w-56 rounded-full bg-gradient-to-br from-white/70 to-white/10 blur-[0.2px]"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          aria-hidden
-        />
-        <div
-          className="absolute -top-16 -right-16 h-64 w-64 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%)",
-          }}
-          aria-hidden
-        />
-
-        {/* Silhouette hills */}
-        <div className="absolute inset-x-0 bottom-0 h-64">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          <svg
-            viewBox="0 0 1200 240"
-            className="absolute bottom-0 left-0 w-full h-full"
-            preserveAspectRatio="none"
-            aria-hidden
-          >
-            <path
-              d="M0,160 C140,190 220,120 360,150 C510,185 570,110 700,140 C860,178 960,120 1200,150 L1200,240 L0,240 Z"
-              fill="rgba(0,0,0,0.65)"
-            />
-            <path
-              d="M0,185 C170,210 260,155 410,175 C560,198 630,150 770,170 C940,195 1040,160 1200,175 L1200,240 L0,240 Z"
-              fill="rgba(2,6,23,0.9)"
-            />
-          </svg>
-        </div>
-
-        {/* Floating lanterns */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          {[...Array(7)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute"
-              style={{
-                left: `${12 + i * 12}%`,
-                bottom: `${18 + (i % 3) * 6}%`,
-              }}
-              animate={
-                reducedMotion
-                  ? {}
-                  : {
-                      y: [0, -14, 0],
-                      x: [0, (i % 2 ? 8 : -8), 0],
-                      opacity: [0.7, 1, 0.8],
-                    }
-              }
-              transition={{
-                duration: 6 + i * 0.6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <div className="h-10 w-7 rounded-2xl bg-gradient-to-b from-amber-200/80 to-amber-500/30 shadow-[0_0_24px_rgba(251,191,36,0.25)]" />
-              <div className="mx-auto mt-1 h-2 w-[2px] bg-white/40" />
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Canvas fireworks */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 h-full w-full"
-          aria-hidden
-        />
-
-        {/* Content */}
-        <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6">
-          <motion.div
-            className="w-full max-w-2xl"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.35)] p-6 sm:p-10">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm tracking-wide text-white/70">Malam yang hangat untuk merayakan…</p>
-                  <h1 className="mt-2 text-3xl sm:text-4xl font-semibold leading-tight">
-                    Untuk seseorang yang bikin dunia terasa lebih lembut ✨
-                  </h1>
-                </div>
-                <div className="hidden sm:block text-right text-white/70 text-sm">
-                  <p>Klik tombol api</p>
-                  <p className="text-xs">(atau klik langit setelahnya)</p>
-                </div>
-              </div>
-
-              <div className="mt-8 flex flex-col sm:flex-row items-center gap-5">
-                <motion.button
-                  type="button"
-                  onClick={triggerShow}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative w-full sm:w-auto select-none"
-                  aria-label="Nyalakan kembang api"
-                >
-                  <div className="relative flex items-center justify-center gap-3 rounded-2xl px-6 py-4 border border-white/15 bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.35)]">
-                    <span className="relative">
-                      <span className="absolute -inset-2 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition-opacity"
-                        style={{
-                          background:
-                            "radial-gradient(circle, rgba(251,191,36,0.55), rgba(249,115,22,0.10), rgba(0,0,0,0))",
-                        }}
-                      />
-                      <span className="relative inline-flex items-center justify-center h-11 w-11 rounded-2xl">
-                        <span
-                          className="absolute inset-0 rounded-2xl"
-                          style={{
-                            background:
-                              "radial-gradient(circle at 50% 35%, rgba(251,191,36,0.95), rgba(249,115,22,0.55) 45%, rgba(190,18,60,0.20) 70%, rgba(0,0,0,0) 72%)",
-                            filter: "drop-shadow(0 0 18px rgba(251,191,36,0.30))",
-                          }}
-                        />
-                        <Flame className="relative h-6 w-6 text-white" />
-                      </span>
-                    </span>
-
-                    <div className="text-left">
-                      <p className="text-base font-semibold">Nyalakan Api</p>
-                      <p className="text-xs text-white/70">Trigger kembang api</p>
-                    </div>
-                  </div>
-                </motion.button>
-
-                <div className="w-full">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4">
-                    <p className="text-sm text-white/70">Petunjuk kecil:</p>
-                    <ul className="mt-2 space-y-1 text-sm">
-                      <li>• Tekan tombol api untuk kembang api pertama.</li>
-                      <li>• Setelah tulisan muncul, klik langit untuk ledakan ekstra.</li>
-                      <li>• Kalau kamu mengaktifkan “reduce motion”, efek akan lebih sederhana.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <AnimatePresence>
-                {armed && (
-                  <motion.div
-                    className="mt-10"
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                  >
-                    <div className="relative overflow-hidden rounded-3xl border border-white/12 bg-gradient-to-b from-white/10 to-white/5 px-6 py-8">
-                      <div
-                        className="absolute -inset-20 opacity-60"
-                        style={{
-                          background:
-                            "radial-gradient(circle at 30% 40%, rgba(255,255,255,0.18), rgba(255,255,255,0) 55%), radial-gradient(circle at 75% 35%, rgba(251,191,36,0.14), rgba(255,255,255,0) 50%)",
-                        }}
-                        aria-hidden
-                      />
-
-                      <motion.div
-                        className="relative"
-                        animate={
-                          celebrate && !reducedMotion
-                            ? {
-                                scale: [1, 1.02, 1],
-                              }
-                            : {}
-                        }
-                        transition={{ duration: 0.9, ease: "easeInOut" }}
-                      >
-                        <p className="text-center text-white/70">dan untukmu…</p>
-                        <motion.h2
-                          className="mt-2 text-center text-4xl sm:text-5xl font-extrabold tracking-tight"
-                          initial={{ letterSpacing: "-0.02em" }}
-                          animate={
-                            celebrate && !reducedMotion
-                              ? {
-                                  y: [0, -2, 0],
-                                }
-                              : {}
-                          }
-                          transition={{ duration: 0.8, ease: "easeInOut" }}
-                        >
-                          Happy Birthday, <span className="text-white">Detya</span> 🎆
-                        </motion.h2>
-                        <p className="mt-4 text-center text-base text-white/80 leading-relaxed">
-                          Semoga hari ini selembut angin malam, sehangat lentera, dan seindah langit penuh bintang.
-                        </p>
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <div className="mt-8 flex items-center justify-center text-xs text-white/50">
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Tema: malam ala Ghibli (inspirasi, bukan aset resmi)</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Footer glow */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-40"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 100%, rgba(251,191,36,0.14), rgba(0,0,0,0) 60%)",
-          }}
-          aria-hidden
-        />
-      </div>
+    <!-- Floating lanterns -->
+    <div class="lanterns" aria-hidden="true">
+      <div class="lantern" style="--x:12%; --b:18%; --d:0s;"></div>
+      <div class="lantern" style="--x:24%; --b:22%; --d:0.8s;"></div>
+      <div class="lantern" style="--x:36%; --b:19%; --d:1.2s;"></div>
+      <div class="lantern" style="--x:48%; --b:24%; --d:0.4s;"></div>
+      <div class="lantern" style="--x:60%; --b:20%; --d:1.6s;"></div>
+      <div class="lantern" style="--x:72%; --b:23%; --d:0.2s;"></div>
+      <div class="lantern" style="--x:84%; --b:19%; --d:1.0s;"></div>
     </div>
-  );
-}
+
+    <!-- Fireworks canvas -->
+    <canvas id="fx" class="fx" aria-hidden="true"></canvas>
+
+    <!-- Hills silhouette -->
+    <svg class="hills" viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,160 C140,190 220,120 360,150 C510,185 570,110 700,140 C860,178 960,120 1200,150 L1200,240 L0,240 Z"
+            fill="rgba(0,0,0,0.65)"/>
+      <path d="M0,185 C170,210 260,155 410,175 C560,198 630,150 770,170 C940,195 1040,160 1200,175 L1200,240 L0,240 Z"
+            fill="rgba(2,6,23,0.9)"/>
+    </svg>
+
+    <!-- Card -->
+    <section class="card" role="region" aria-label="Birthday message">
+      <header class="card__header">
+        <div>
+          <p class="kicker">Malam yang hangat untuk merayakan…</p>
+          <h1>Untuk seseorang yang bikin dunia terasa lebih lembut ✨</h1>
+        </div>
+        <div class="hint">
+          <p>Klik tombol api</p>
+          <p class="small">(klik langit setelahnya)</p>
+        </div>
+      </header>
+
+      <div class="card__content">
+        <button id="flameBtn" class="flameBtn" type="button" aria-label="Nyalakan kembang api">
+          <span class="flameGlow" aria-hidden="true"></span>
+          <span class="flameIcon" aria-hidden="true">🔥</span>
+          <span class="flameText">
+            <strong>Nyalakan Api</strong>
+            <em>Trigger kembang api</em>
+          </span>
+        </button>
+
+        <div class="guide">
+          <p class="guide__title">Petunjuk kecil:</p>
+          <ul>
+            <li>• Tekan tombol api untuk kembang api pertama.</li>
+            <li>• Setelah tulisan muncul, klik langit untuk ledakan ekstra.</li>
+            <li>• Jika perangkatmu “Reduce Motion”, animasi otomatis lebih sederhana.</li>
+          </ul>
+        </div>
+      </div>
+
+      <section id="reveal" class="reveal" aria-live="polite">
+        <p class="reveal__kicker">dan untukmu…</p>
+        <h2 class="reveal__title">Happy Birthday, <span>Detya</span> 🎆</h2>
+        <p class="reveal__desc">
+          Semoga hari ini selembut angin malam, sehangat lentera, dan seindah langit penuh bintang.
+        </p>
+      </section>
+
+      <footer class="badge">
+        <span>Tema: malam ala Ghibli (inspirasi, bukan aset resmi)</span>
+      </footer>
+    </section>
+
+    <div class="footerGlow" aria-hidden="true"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
