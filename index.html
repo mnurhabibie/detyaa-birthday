@@ -1,90 +1,631 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Happy Birthday Detya ✨</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selamat Ulang Tahun Detya</title>
+  <style>
+    :root{
+      --sky1:#05060f; --sky2:#0b1330; --sky3:#101b3f;
+      --text:#f3f5ff; --muted:rgba(243,245,255,.75);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
+      color:var(--text);
+      overflow:hidden;
+      background: radial-gradient(1200px 700px at 50% 30%, var(--sky3), var(--sky2) 45%, var(--sky1) 100%);
+    }
+
+    /* Stars */
+    .stars, .stars::before, .stars::after{
+      position:absolute; inset:0;
+      content:"";
+      background-repeat: repeat;
+      background-size: 220px 220px;
+      opacity:.55;
+      pointer-events:none;
+      filter: drop-shadow(0 0 2px rgba(255,255,255,.15));
+    }
+    .stars{
+      background-image:
+        radial-gradient(2px 2px at 20px 40px, rgba(255,255,255,.9) 50%, transparent 60%),
+        radial-gradient(1px 1px at 80px 120px, rgba(255,255,255,.7) 50%, transparent 60%),
+        radial-gradient(1.5px 1.5px at 160px 60px, rgba(255,255,255,.8) 50%, transparent 60%),
+        radial-gradient(1px 1px at 200px 180px, rgba(255,255,255,.6) 50%, transparent 60%);
+      animation: drift 18s linear infinite;
+    }
+    .stars::before{
+      background-image:
+        radial-gradient(1px 1px at 40px 160px, rgba(255,255,255,.7) 50%, transparent 60%),
+        radial-gradient(2px 2px at 140px 190px, rgba(255,255,255,.8) 50%, transparent 60%),
+        radial-gradient(1px 1px at 210px 20px, rgba(255,255,255,.6) 50%, transparent 60%);
+      opacity:.45;
+      animation: drift 28s linear infinite reverse;
+    }
+    .stars::after{
+      background-image:
+        radial-gradient(1px 1px at 110px 30px, rgba(255,255,255,.65) 50%, transparent 60%),
+        radial-gradient(1.5px 1.5px at 10px 210px, rgba(255,255,255,.75) 50%, transparent 60%),
+        radial-gradient(1px 1px at 190px 90px, rgba(255,255,255,.55) 50%, transparent 60%);
+      opacity:.35;
+      animation: drift 40s linear infinite;
+    }
+    @keyframes drift{ from{transform:translate3d(0,0,0)} to{transform:translate3d(-220px,220px,0)} }
+
+    #wrap{position:relative; height:100%; width:100%}
+    canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+    /* Ground / hills */
+    .ground{
+      position:absolute; left:0; right:0; bottom:0;
+      height:38vh;
+      background:
+        radial-gradient(900px 220px at 50% 10%, rgba(255,204,102,.06), transparent 60%),
+        linear-gradient(to top, #04060a 0%, #060a12 45%, rgba(0,0,0,0) 100%);
+      pointer-events:none;
+    }
+    .hills{
+      position:absolute; left:-10vw; right:-10vw; bottom:10vh;
+      height:22vh;
+      background:
+        radial-gradient(60% 120% at 20% 100%, #060a12 60%, transparent 61%),
+        radial-gradient(60% 120% at 55% 100%, #070b14 60%, transparent 61%),
+        radial-gradient(60% 120% at 85% 100%, #050910 60%, transparent 61%);
+      opacity:.95;
+      pointer-events:none;
+    }
+
+    /* Village silhouettes */
+    .village{
+      position:absolute; left:50%; bottom:14vh;
+      transform: translateX(-50%);
+      width:min(980px, 92vw);
+      height:22vh;
+      pointer-events:none;
+      opacity:.95;
+    }
+    .hut{
+      position:absolute; bottom:0;
+      width:18%; height:48%;
+      background:#070a10;
+      border-radius:10px 10px 8px 8px;
+      box-shadow:0 0 0 1px rgba(255,255,255,.03) inset;
+    }
+    .hut::before{
+      content:"";
+      position:absolute; left:-8%; right:-8%; top:-45%;
+      height:55%;
+      background:#060810;
+      transform: skewX(-12deg);
+      border-radius:14px 14px 6px 6px;
+    }
+    .hut .window{
+      position:absolute; left:14%; top:34%;
+      width:26%; height:22%;
+      border-radius:4px;
+      background: radial-gradient(circle at 40% 40%, rgba(255,212,138,.95), rgba(255,204,102,.65) 55%, rgba(255,204,102,.1) 75%, transparent 80%);
+      box-shadow:0 0 18px rgba(255,204,102,.35), 0 0 40px rgba(255,204,102,.12);
+      animation:flicker 2.6s infinite ease-in-out;
+    }
+    .hut .window.w2{ left:auto; right:14%; top:40%; width:22%; height:18%; animation-duration:3.2s; }
+    @keyframes flicker{
+      0%,100%{filter:brightness(1);opacity:.9}
+      35%{filter:brightness(1.2);opacity:1}
+      65%{filter:brightness(.92);opacity:.85}
+    }
+
+    /* Candles field */
+    .candles{
+      position:absolute; left:0; right:0; bottom:0;
+      height:18vh; pointer-events:none; overflow:hidden;
+    }
+    .candle{
+      position:absolute; bottom:3vh;
+      width:10px; height:28px;
+      border-radius:6px;
+      background:linear-gradient(#f6f1e5, #e7ddc7);
+      box-shadow:0 0 0 1px rgba(0,0,0,.25) inset;
+      transform: translateX(-50%);
+    }
+    .candle::before{
+      content:"";
+      position:absolute; left:50%; top:-12px;
+      width:18px; height:18px;
+      transform: translateX(-50%) rotate(6deg);
+      background: radial-gradient(circle at 45% 55%, rgba(255,240,200,1), rgba(255,204,102,.9) 40%, rgba(255,140,40,.25) 70%, transparent 72%);
+      animation: flame 1.9s infinite ease-in-out;
+    }
+    .candle::after{
+      content:"";
+      position:absolute; left:50%; top:-22px;
+      width:120px; height:120px;
+      transform: translate(-50%, 0);
+      background: radial-gradient(circle, rgba(255,204,102,.22), transparent 62%);
+      opacity:.9;
+    }
+    @keyframes flame{
+      0%,100%{ transform: translateX(-50%) rotate(5deg) scale(1) }
+      50%{ transform: translateX(-50%) rotate(-6deg) scale(1.07) }
+    }
+
+    /* UI */
+    .ui{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      pointer-events:none; padding:22px;
+    }
+    .panel{
+      pointer-events:auto;
+      width:min(780px, 92vw);
+      padding:18px 18px 16px;
+      border-radius:18px;
+      background: rgba(10,14,28,.55);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 18px 60px rgba(0,0,0,.35);
+      text-align:center;
+    }
+    .title{
+      font-size: clamp(18px, 2.4vw, 26px);
+      letter-spacing:.4px;
+      margin:2px 0 6px;
+    }
+    .subtitle{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.35;
+    }
+    .row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    button{
+      appearance:none;
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:650;
+      cursor:pointer;
+      color:#0b1022;
+      background: linear-gradient(180deg, rgba(255,212,138,1), rgba(255,170,70,1));
+      box-shadow:0 10px 30px rgba(255,170,70,.18), 0 2px 0 rgba(0,0,0,.25);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    button:hover{ transform: translateY(-1px); filter: brightness(1.04); }
+    button:active{ transform: translateY(1px); }
+    .ghost{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow:none;
+    }
+    .color-btn{ padding:10px 12px; border-radius:999px; }
+    .color-btn.active{ outline:2px solid rgba(255,255,255,.65); outline-offset:2px; }
+    .hint{ margin-top:10px; font-size:12px; color:rgba(243,245,255,.65); }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .stars, .stars::before, .stars::after, .hut .window, .candle::before{ animation:none !important; }
+      button{ transition:none !important; }
+    }
+  </style>
 </head>
 <body>
-  <main class="scene" id="scene" aria-label="Night birthday scene">
-    <!-- Layers -->
-    <div class="bg"></div>
-    <div class="stars" id="stars" aria-hidden="true"></div>
-    <div class="moon" aria-hidden="true"></div>
-    <div class="moon-glow" aria-hidden="true"></div>
+  <div id="wrap" aria-label="Malam pedesaan dengan lilin dan kembang api">
+    <div class="stars" aria-hidden="true"></div>
 
-    <!-- Floating lanterns -->
-    <div class="lanterns" aria-hidden="true">
-      <div class="lantern" style="--x:12%; --b:18%; --d:0s;"></div>
-      <div class="lantern" style="--x:24%; --b:22%; --d:0.8s;"></div>
-      <div class="lantern" style="--x:36%; --b:19%; --d:1.2s;"></div>
-      <div class="lantern" style="--x:48%; --b:24%; --d:0.4s;"></div>
-      <div class="lantern" style="--x:60%; --b:20%; --d:1.6s;"></div>
-      <div class="lantern" style="--x:72%; --b:23%; --d:0.2s;"></div>
-      <div class="lantern" style="--x:84%; --b:19%; --d:1.0s;"></div>
+    <canvas id="fx"></canvas>
+
+    <div class="hills" aria-hidden="true"></div>
+    <div class="ground" aria-hidden="true"></div>
+
+    <div class="village" aria-hidden="true">
+      <div class="hut" style="left:6%; height:44%; width:18%;">
+        <div class="window"></div><div class="window w2"></div>
+      </div>
+      <div class="hut" style="left:28%; height:52%; width:20%;">
+        <div class="window"></div><div class="window w2"></div>
+      </div>
+      <div class="hut" style="left:53%; height:46%; width:19%;">
+        <div class="window"></div><div class="window w2"></div>
+      </div>
+      <div class="hut" style="left:76%; height:50%; width:20%;">
+        <div class="window"></div><div class="window w2"></div>
+      </div>
     </div>
 
-    <!-- Fireworks canvas -->
-    <canvas id="fx" class="fx" aria-hidden="true"></canvas>
+    <div class="candles" id="candles" aria-hidden="true"></div>
 
-    <!-- Hills silhouette -->
-    <svg class="hills" viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0,160 C140,190 220,120 360,150 C510,185 570,110 700,140 C860,178 960,120 1200,150 L1200,240 L0,240 Z"
-            fill="rgba(0,0,0,0.65)"/>
-      <path d="M0,185 C170,210 260,155 410,175 C560,198 630,150 770,170 C940,195 1040,160 1200,175 L1200,240 L0,240 Z"
-            fill="rgba(2,6,23,0.9)"/>
-    </svg>
-
-    <!-- Card -->
-    <section class="card" role="region" aria-label="Birthday message">
-      <header class="card__header">
-        <div>
-          <p class="kicker">Malam yang hangat untuk merayakan…</p>
-          <h1>Untuk seseorang yang bikin dunia terasa lebih lembut ✨</h1>
-        </div>
-        <div class="hint">
-          <p>Klik tombol api</p>
-          <p class="small">(klik langit setelahnya)</p>
-        </div>
-      </header>
-
-      <div class="card__content">
-        <button id="flameBtn" class="flameBtn" type="button" aria-label="Nyalakan kembang api">
-          <span class="flameGlow" aria-hidden="true"></span>
-          <span class="flameIcon" aria-hidden="true">🔥</span>
-          <span class="flameText">
-            <strong>Nyalakan Api</strong>
-            <em>Trigger kembang api</em>
-          </span>
-        </button>
-
-        <div class="guide">
-          <p class="guide__title">Petunjuk kecil:</p>
-          <ul>
-            <li>• Tekan tombol api untuk kembang api pertama.</li>
-            <li>• Setelah tulisan muncul, klik langit untuk ledakan ekstra.</li>
-            <li>• Jika perangkatmu “Reduce Motion”, animasi otomatis lebih sederhana.</li>
-          </ul>
-        </div>
-      </div>
-
-      <section id="reveal" class="reveal" aria-live="polite">
-        <p class="reveal__kicker">dan untukmu…</p>
-        <h2 class="reveal__title">Happy Birthday, <span>Detya</span> 🎆</h2>
-        <p class="reveal__desc">
-          Semoga hari ini selembut angin malam, sehangat lentera, dan seindah langit penuh bintang.
+    <div class="ui">
+      <div class="panel">
+        <div class="title">Malam Pedesaan • Cahaya Lilin • Kembang Api</div>
+        <p class="subtitle">
+          Tekan <b>🔥 Api</b> untuk menembakkan roket. Saat meledak, muncul ledakan <b>multi-warna (gradasi)</b>
+          dan tulisan kembang api: <b>“Selamat Ulang Tahun Detya”</b>.
         </p>
-      </section>
 
-      <footer class="badge">
-        <span>Tema: malam ala Ghibli (inspirasi, bukan aset resmi)</span>
-      </footer>
-    </section>
+        <div class="row">
+          <button id="btnFire" title="Nyalakan kembang api (Space/Enter juga bisa)">🔥 Api</button>
+          <button id="btnBurst" class="ghost" title="Ledakkan di posisi acak">✨ Meledak Sekarang</button>
+          <button id="btnClear" class="ghost" title="Bersihkan efek">🧹 Bersihkan</button>
+        </div>
 
-    <div class="footerGlow" aria-hidden="true"></div>
-  </main>
+        <div class="row" style="margin-top:10px">
+          <button class="ghost color-btn active" data-scheme="gold">🟡 Emas</button>
+          <button class="ghost color-btn" data-scheme="sunset">🧡 Sunset</button>
+          <button class="ghost color-btn" data-scheme="neon">💚 Neon</button>
+          <button class="ghost color-btn" data-scheme="ocean">💙 Ocean</button>
+          <button class="ghost color-btn" data-scheme="random">🌈 Acak</button>
+        </div>
 
-  <script src="script.js"></script>
+        <div class="hint">Tips: klik/ketuk di langit untuk menentukan titik ledakan. Tombol keyboard: Space/Enter = Api, C = Bersihkan.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Candles generation =====
+    const candlesEl = document.getElementById("candles");
+    const candleCount = 26;
+    function seedCandles(){
+      candlesEl.innerHTML = "";
+      for (let i=0; i<candleCount; i++){
+        const c = document.createElement("div");
+        c.className = "candle";
+        const x = (i/(candleCount-1))*100 + (Math.random()*4-2);
+        const y = Math.random()*3;
+        c.style.left = x + "%";
+        c.style.bottom = (2 + y) + "vh";
+        c.style.height = (22 + Math.random()*18) + "px";
+        c.style.opacity = (0.75 + Math.random()*0.25);
+        candlesEl.appendChild(c);
+      }
+    }
+    seedCandles();
+    window.addEventListener("resize", seedCandles);
+
+    // ===== Fireworks canvas =====
+    const canvas = document.getElementById("fx");
+    const ctx = canvas.getContext("2d", { alpha: true });
+
+    function resize(){
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      canvas.width = Math.floor(innerWidth * dpr);
+      canvas.height = Math.floor(innerHeight * dpr);
+      canvas.style.width = innerWidth + "px";
+      canvas.style.height = innerHeight + "px";
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+    function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+    // ===== Color schemes (multi-color gradient / palette) =====
+    let colorScheme = "gold";
+    const schemes = {
+      gold:   { hues:[38, 44, 50, 32, 58] },
+      sunset: { hues:[8, 22, 34, 300, 46] },     // merah-oranye-emas + sedikit pink
+      neon:   { hues:[120, 150, 190, 300, 30] }, // hijau neon + cyan + ungu + emas
+      ocean:  { hues:[195, 210, 230, 260, 180] } // biru-laut sampai ungu
+    };
+    function pickHue(i, total){
+      if (colorScheme === "random") return rand(0,360);
+      const base = schemes[colorScheme]?.hues || schemes.gold.hues;
+      // gradasi: campur index + noise kecil supaya terasa "gradient multi warna"
+      const h = base[i % base.length];
+      const drift = (i/Math.max(1,total)) * 18;  // shifting hue pelan
+      return (h + drift + rand(-10,10) + 360) % 360;
+    }
+
+    // ===== Entities =====
+    const rockets = [];
+    const particles = [];
+    const grav = 0.055;
+
+    // Particle kinds:
+    // - "spark": titik ledakan
+    // - "text": titik membentuk tulisan (lebih “stabil” biar terbaca)
+    function makeParticle(x,y,vx,vy,r,lifeMax,hue,kind="spark",sparkle=false){
+      return { x,y,vx,vy,r, life:0, max:lifeMax, hue, kind, sparkle };
+    }
+
+    // ===== Rocket & Burst =====
+    function launchRocket(targetX, targetY){
+      const startX = rand(innerWidth*0.2, innerWidth*0.8);
+      const startY = innerHeight + 12;
+      rockets.push({
+        x:startX, y:startY,
+        vx:(targetX - startX)/55,
+        vy:(targetY - startY)/55,
+        targetX, targetY,
+        life:0,
+        trail:[]
+      });
+    }
+
+    function burstMulti(x,y){
+      const count = Math.floor(rand(90, 140));
+      for (let i=0; i<count; i++){
+        const a = (Math.PI*2) * (i/count) + rand(-0.12,0.12);
+        const sp = rand(1.2, 4.9);
+        const hue = pickHue(i, count);
+
+        particles.push(makeParticle(
+          x, y,
+          Math.cos(a)*sp,
+          Math.sin(a)*sp,
+          rand(1.2, 2.6),
+          rand(50, 90),
+          hue,
+          "spark",
+          Math.random() < 0.22
+        ));
+      }
+      // Glitter core
+      for (let i=0; i<28; i++){
+        particles.push(makeParticle(
+          x, y,
+          rand(-1.4,1.4),
+          rand(-1.4,1.4),
+          rand(1.0, 2.2),
+          rand(28, 50),
+          pickHue(i, 28),
+          "spark",
+          true
+        ));
+      }
+    }
+
+    // ===== Text Fireworks (particles forming text) =====
+    const off = document.createElement("canvas");
+    const offCtx = off.getContext("2d", { willReadFrequently:true });
+
+    function textBurst(x, y, text){
+      // Render text to offscreen canvas and sample pixels
+      const maxW = Math.min(980, innerWidth * 0.92);
+      const fontSize = clamp(Math.floor(innerWidth * 0.055), 28, 62);
+      const padding = 24;
+
+      off.width = Math.floor(maxW);
+      off.height = Math.floor(fontSize * 2.6);
+      offCtx.clearRect(0,0,off.width,off.height);
+
+      offCtx.textAlign = "center";
+      offCtx.textBaseline = "middle";
+      offCtx.fillStyle = "#ffffff";
+
+      // subtle bold for readability
+      offCtx.font = `800 ${fontSize}px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+      offCtx.fillText(text, off.width/2, off.height/2);
+
+      // Create particle positions from pixels
+      const img = offCtx.getImageData(0,0,off.width,off.height).data;
+      const step = clamp(Math.floor(fontSize / 10), 4, 8); // density
+      const points = [];
+
+      for (let yy=0; yy<off.height; yy+=step){
+        for (let xx=0; xx<off.width; xx+=step){
+          const idx = (yy*off.width + xx)*4;
+          const a = img[idx+3];
+          if (a > 120) points.push({xx,yy});
+        }
+      }
+
+      // Center the text around (x,y)
+      const originX = x - off.width/2;
+      const originY = y - off.height/2;
+
+      const total = points.length;
+      for (let i=0; i<total; i++){
+        const p = points[i];
+        const px = originX + p.xx;
+        const py = originY + p.yy;
+
+        // Small outward drift so it "sparkles", but still readable
+        const angle = Math.atan2(py - y, px - x);
+        const sp = rand(0.2, 1.1);
+
+        const hue = pickHue(i, total);
+        particles.push(makeParticle(
+          px, py,
+          Math.cos(angle)*sp,
+          Math.sin(angle)*sp,
+          rand(1.1, 2.0),
+          rand(70, 105),
+          hue,
+          "text",
+          Math.random() < 0.12
+        ));
+      }
+    }
+
+    function megaExplosion(x,y){
+      // 1) ledakan multi-warna
+      burstMulti(x,y);
+      // 2) tulisan dari partikel kembang api (di sekitar titik ledak, agak di bawah)
+      const textY = y + clamp(innerHeight*0.06, 26, 60);
+      textBurst(x, clamp(textY, innerHeight*0.12, innerHeight*0.58), "Selamat Ulang Tahun Detya");
+    }
+
+    // ===== Drawing helpers =====
+    function drawGlow(x,y,rad,alpha){
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      const g = ctx.createRadialGradient(x,y,0,x,y,rad);
+      g.addColorStop(0, "rgba(255,204,102,0.35)");
+      g.addColorStop(0.6, "rgba(255,204,102,0.10)");
+      g.addColorStop(1, "rgba(255,204,102,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x,y,rad,0,Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function clearAll(){
+      rockets.length = 0;
+      particles.length = 0;
+      // hard clear to black (so it really resets)
+      ctx.fillStyle = "rgba(0,0,0,1)";
+      ctx.fillRect(0,0,innerWidth,innerHeight);
+    }
+
+    // ===== Animation loop =====
+    let last = performance.now();
+    function tick(now){
+      const dt = Math.min(2, (now-last)/16.67);
+      last = now;
+
+      // Fade for trails
+      ctx.fillStyle = "rgba(0,0,0,0.18)";
+      ctx.fillRect(0,0,innerWidth,innerHeight);
+
+      // Warm horizon glow
+      drawGlow(innerWidth*0.5, innerHeight*0.78, innerWidth*0.55, 0.20);
+
+      // Rockets
+      for (let i=rockets.length-1; i>=0; i--){
+        const r = rockets[i];
+        r.life += dt;
+
+        r.trail.push({x:r.x, y:r.y});
+        if (r.trail.length > 18) r.trail.shift();
+
+        r.x += r.vx * (dt*16.67);
+        r.y += r.vy * (dt*16.67);
+
+        // trail
+        ctx.save();
+        for (let t=0; t<r.trail.length; t++){
+          const p = r.trail[t];
+          const a = t / r.trail.length;
+          ctx.globalAlpha = a * 0.55;
+          ctx.fillStyle = "rgba(255,210,130,1)";
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.6 + a*1.4, 0, Math.PI*2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // head
+        ctx.save();
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = "rgba(255,240,200,1)";
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, 2.4, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+
+        const dx = r.x - r.targetX;
+        const dy = r.y - r.targetY;
+        if ((dx*dx + dy*dy) < 220 || r.life > 80){
+          megaExplosion(r.targetX, r.targetY);
+          rockets.splice(i,1);
+        }
+      }
+
+      // Particles
+      for (let i=particles.length-1; i>=0; i--){
+        const p = particles[i];
+        p.life += dt;
+
+        // physics: text particles fall slower to keep readable
+        const g = (p.kind === "text") ? (grav * 0.35) : grav;
+
+        p.vy += g * dt * 16.67;
+
+        // friction: text particles have more damping
+        const damp = (p.kind === "text") ? 0.985 : 0.992;
+        p.vx *= Math.pow(damp, dt*16.67);
+        p.vy *= Math.pow(damp, dt*16.67);
+
+        p.x += p.vx * dt * 16.67;
+        p.y += p.vy * dt * 16.67;
+
+        const t = p.life / p.max;
+        const alpha = Math.max(0, 1 - t);
+
+        const sparkleFactor = p.sparkle ? (0.9 + Math.sin(p.life*0.7)*0.18) : 1;
+        const r = p.r * sparkleFactor;
+
+        // draw
+        ctx.save();
+        ctx.globalAlpha = alpha;
+
+        // color + glow
+        ctx.fillStyle = `hsla(${p.hue}, 95%, 70%, 1)`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+        ctx.fill();
+
+        // extra glow for text particles (so letters stand out)
+        const glowMul = (p.kind === "text") ? 1.0 : 0.55;
+        ctx.globalAlpha = alpha * glowMul * 0.55;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r*3.0, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 95%, 70%, 0.24)`;
+        ctx.fill();
+
+        ctx.restore();
+
+        if (p.life >= p.max) particles.splice(i,1);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    // init
+    ctx.fillStyle = "rgba(0,0,0,1)";
+    ctx.fillRect(0,0,innerWidth,innerHeight);
+    requestAnimationFrame(tick);
+
+    // ===== Controls =====
+    const btnFire = document.getElementById("btnFire");
+    const btnBurst = document.getElementById("btnBurst");
+    const btnClear = document.getElementById("btnClear");
+
+    function fireAt(x,y){
+      const ty = clamp(y, innerHeight*0.10, innerHeight*0.52);
+      launchRocket(x, ty);
+    }
+
+    btnFire.addEventListener("click", ()=>{
+      fireAt(innerWidth*0.5, innerHeight*0.28);
+    });
+
+    btnBurst.addEventListener("click", ()=>{
+      megaExplosion(rand(innerWidth*0.25, innerWidth*0.75), rand(innerHeight*0.14, innerHeight*0.45));
+    });
+
+    btnClear.addEventListener("click", clearAll);
+
+    // Click to set target (ignore clicks on buttons)
+    window.addEventListener("pointerdown", (e)=>{
+      const path = e.composedPath?.() || [];
+      if (path.some(el => el && el.tagName === "BUTTON")) return;
+      fireAt(e.clientX, e.clientY);
+    });
+
+    // Keyboard
+    window.addEventListener("keydown", (e)=>{
+      if (e.code === "Space" || e.code === "Enter"){
+        e.preventDefault();
+        fireAt(innerWidth*0.5, innerHeight*0.28);
+      }
+      if (e.key.toLowerCase() === "c") clearAll();
+    });
+
+    // Color scheme buttons
+    document.querySelectorAll(".color-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        colorScheme = btn.dataset.scheme || "gold";
+        document.querySelectorAll(".color-btn").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+  </script>
 </body>
 </html>
