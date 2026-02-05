@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selamat Ulang Tahun, Sayang! 🎂</title>
+  <style>
+    :root{
+      --bg1:#fff0f7;
+      --bg2:#f0f9ff;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --card:rgba(255,255,255,.75);
+      --card2:rgba(255,255,255,.55);
+      --shadow: 0 20px 60px rgba(0,0,0,.12);
+      --ring: 0 0 0 3px rgba(236,72,153,.25);
+      --pink:#ec4899;
+      --violet:#8b5cf6;
+      --sky:#38bdf8;
+      --lime:#84cc16;
+      --gold:#f59e0b;
+      --radius:28px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(236,72,153,.22), transparent 55%),
+        radial-gradient(1000px 700px at 90% 20%, rgba(56,189,248,.20), transparent 55%),
+        radial-gradient(900px 600px at 50% 95%, rgba(139,92,246,.18), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    /* floating blobs */
+    .blob{position:fixed; inset:auto; width:320px; height:320px; border-radius:999px; filter: blur(30px); opacity:.45; z-index:-2;}
+    .b1{left:-120px; top:-100px; background: radial-gradient(circle at 30% 30%, rgba(236,72,153,.85), rgba(236,72,153,0)); animation: float 12s ease-in-out infinite;}
+    .b2{right:-140px; top:50px; background: radial-gradient(circle at 60% 40%, rgba(56,189,248,.9), rgba(56,189,248,0)); animation: float 14s ease-in-out infinite reverse;}
+    .b3{left:40%; bottom:-180px; background: radial-gradient(circle at 45% 45%, rgba(139,92,246,.9), rgba(139,92,246,0)); animation: float 16s ease-in-out infinite;}
+
+    @keyframes float{0%,100%{transform: translate(0,0) scale(1)} 50%{transform: translate(20px,-18px) scale(1.05)}}
+
+    .wrap{max-width: 980px; margin:0 auto; padding: 28px 18px 90px;}
+
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      margin: 10px 0 18px;
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      user-select:none;
+    }
+    .badge{
+      width:44px; height:44px;
+      border-radius:14px;
+      background: linear-gradient(135deg, rgba(236,72,153,.95), rgba(139,92,246,.95));
+      box-shadow: 0 14px 30px rgba(236,72,153,.25);
+      display:grid; place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .badge::after{content:""; position:absolute; inset:-40%; background: conic-gradient(from 90deg, rgba(255,255,255,.0), rgba(255,255,255,.45), rgba(255,255,255,0)); animation: sheen 3.6s linear infinite;}
+    @keyframes sheen{to{transform: rotate(360deg)}}
+    .badge span{font-size:22px; filter: drop-shadow(0 8px 16px rgba(0,0,0,.2)); position:relative; z-index:1}
+
+    .brand h1{margin:0; font-size: 18px; letter-spacing:.2px}
+    .brand p{margin:0; font-size: 12px; color:var(--muted)}
+
+    .top-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+
+    .btn{
+      border:0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 28px rgba(0,0,0,.08);
+      color: var(--ink);
+      font-weight: 600;
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .btn:hover{transform: translateY(-1px); box-shadow: 0 18px 40px rgba(0,0,0,.12)}
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(236,72,153,.95), rgba(139,92,246,.95));
+      color:white;
+      box-shadow: 0 18px 45px rgba(236,72,153,.22);
+    }
+    .btn.ghost{background: rgba(255,255,255,.55)}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr;}
+      header{align-items:flex-start;}
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.55);
+      backdrop-filter: blur(14px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero{
+      padding: 18px 18px 16px;
+    }
+
+    .hero-top{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      font-size: 34px;
+      line-height: 1.05;
+      margin: 6px 0 6px;
+      letter-spacing: -.8px;
+    }
+
+    .subtitle{margin:0; color:var(--muted); font-size: 14px}
+
+    .name-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top: 12px;}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(255,255,255,.6);
+      box-shadow: 0 12px 26px rgba(0,0,0,.06);
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .input{
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 14px;
+      background: rgba(255,255,255,.65);
+      outline:none;
+      width: min(360px, 100%);
+      box-shadow: 0 10px 22px rgba(0,0,0,.06);
+    }
+    .input:focus{box-shadow: 0 0 0 3px rgba(56,189,248,.25), 0 12px 26px rgba(0,0,0,.08)}
+
+    .stage{
+      position:relative;
+      margin-top: 14px;
+      border-radius: 22px;
+      background:
+        radial-gradient(900px 300px at 50% 10%, rgba(255,255,255,.8), rgba(255,255,255,.35)),
+        linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.35));
+      border: 1px solid rgba(255,255,255,.6);
+      min-height: 320px;
+      overflow:hidden;
+    }
+
+    canvas{display:block; width:100%; height:320px;}
+
+    .stage-ui{
+      position:absolute;
+      inset: 14px 14px auto 14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      pointer-events:none;
+    }
+
+    .mini{
+      pointer-events:auto;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .toggle{
+      pointer-events:auto;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(255,255,255,.65);
+      box-shadow: 0 10px 22px rgba(0,0,0,.06);
+      font-size: 13px;
+      user-select:none;
+      cursor:pointer;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; background: var(--lime); box-shadow: 0 0 0 3px rgba(132,204,22,.2)}
+    .dot.off{background:#9ca3af; box-shadow: 0 0 0 3px rgba(156,163,175,.18)}
+
+    .tooltip{
+      position:absolute;
+      left: 14px;
+      bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(17,24,39,.72);
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .side{padding: 16px;}
+
+    .side h2{margin:0 0 8px; font-size: 16px}
+    .side p{margin:0 0 10px; color:var(--muted); font-size: 13px; line-height:1.45}
+
+    .panel{
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.08);
+    }
+
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+
+    .meter{
+      height: 10px;
+      width: 100%;
+      border-radius: 999px;
+      background: rgba(17,24,39,.08);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.55);
+    }
+    .bar{height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg, rgba(56,189,248,.95), rgba(236,72,153,.95)); transition: width .35s ease;}
+
+    .tiny{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(17,24,39,.75);
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.65);
+      padding: 8px 10px;
+      border-radius: 14px;
+      width:100%;
+      line-height:1.35;
+      white-space: pre-wrap;
+    }
+
+    .footer{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* confetti */
+    .confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:50;
+      overflow:hidden;
+    }
+    .confetto{
+      position:absolute;
+      width:10px;
+      height:14px;
+      border-radius: 3px;
+      opacity:.95;
+      transform: translate3d(0,0,0) rotate(0deg);
+      animation: fall linear forwards;
+    }
+    @keyframes fall{
+      to{transform: translate3d(var(--dx), 110vh, 0) rotate(var(--rot)); opacity: 1;}
+    }
+
+    /* modal */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background: rgba(17,24,39,.55);
+      backdrop-filter: blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index:60;
+    }
+    .modal{
+      width:min(720px, 100%);
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(255,255,255,.6);
+      border-radius: 26px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .modal header{margin:0; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,.06)}
+    .modal header h3{margin:0; font-size: 16px}
+    .modal .content{padding: 14px 16px 16px}
+    .modal .content p{margin: 0 0 12px; color:var(--muted); font-size: 13px; line-height:1.5}
+    .modal .content textarea{
+      width:100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.75);
+      padding: 12px;
+      outline:none;
+      font-size: 14px;
+      line-height:1.35;
+    }
+    .modal .content textarea:focus{box-shadow: var(--ring)}
+    .modal .actions{display:flex; gap:10px; justify-content:flex-end; padding: 0 16px 16px}
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important; transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="badge" aria-hidden="true"><span>💖</span></div>
+        <div>
+          <h1>Mini Surprise Ulang Tahun</h1>
+          <p>Halaman kecil yang lucu, interaktif, dan bikin senyum 😊</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn ghost" id="btnEdit">✍️ Edit Pesan</button>
+        <button class="btn" id="btnMusic">🔊 Musik: <span id="musicLabel">OFF</span></button>
+        <button class="btn primary" id="btnCelebrate">🎉 Rayakan!</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card hero">
+        <div class="hero-top">
+          <div>
+            <div class="pill" title="Klik tombol Rayakan untuk efek confetti!">🎂 Mode: <b>Ulang Tahun</b> • <span id="dateText"></span></div>
+            <h2 class="title">Selamat Ulang Tahun, <span id="name">Sayang</span>! 🥳</h2>
+            <p class="subtitle" id="subtitle">Aku punya satu hal kecil yang interaktif buat kamu. Klik-klik ya!</p>
+            <div class="name-row">
+              <input class="input" id="nameInput" maxlength="24" placeholder="Nama panggilan pasangan (mis. 'Beb', 'Cinta')" />
+              <button class="btn" id="btnSetName">Simpan Nama</button>
+              <span class="pill">💌 <span id="linePreview">"Semoga harimu manis kayak kue!"</span></span>
+            </div>
+          </div>
+
+          <div class="row" style="justify-content:flex-end">
+            <span class="pill">🧁 Klik di kanvas: <b>muncul hati</b></span>
+            <span class="pill">🎈 Drag balon: <b>seret!</b></span>
+          </div>
+        </div>
+
+        <div class="stage" aria-label="Area interaktif">
+          <div class="stage-ui">
+            <div class="mini">
+              <div class="toggle" id="toggleTrail" role="button" tabindex="0" aria-pressed="true">
+                <span class="dot" id="trailDot"></span>
+                Jejak hati
+              </div>
+              <div class="toggle" id="toggleBalloons" role="button" tabindex="0" aria-pressed="true">
+                <span class="dot" id="balloonDot"></span>
+                Balon
+              </div>
+            </div>
+            <div class="pill" id="scorePill" title="Cium virtual 😘 ditambah tiap hati muncul">😘 Skor: <b><span id="score">0</span></b></div>
+          </div>
+          <canvas id="c" width="1200" height="480"></canvas>
+          <div class="tooltip" id="tip">Tip: klik, tahan, dan drag balon 🎈 • ketik nama di atas ✨</div>
+        </div>
+
+        <div class="footer">
+          <div>Made with 💖 (dan sedikit kelucuan) • <span id="footerNote">Klik <b>Edit Pesan</b> untuk ganti kata-katanya.</span></div>
+          <div class="pill">⌨️ Shortcut: <b>R</b> = Rayakan • <b>M</b> = Musik</div>
+        </div>
+      </section>
+
+      <aside class="card side">
+        <h2>Pesan Rahasia 💌</h2>
+        <p>Ini pesan yang bisa kamu edit. Saat kamu klik <b>Rayakan</b>, pesan ini akan muncul satu per satu seperti “chat” lucu.</p>
+
+        <div class="panel" style="margin-bottom:12px;">
+          <div class="row" style="justify-content:space-between; margin-bottom:10px;">
+            <span class="pill">📨 Progress Pesan</span>
+            <span class="pill">🪄 Mode: <b id="modeText">Santai</b></span>
+          </div>
+          <div class="meter" aria-label="progress"><div class="bar" id="bar"></div></div>
+          <div style="height:10px"></div>
+          <div class="tiny" id="chat">(klik Rayakan untuk mulai~)</div>
+        </div>
+
+        <div class="panel">
+          <h2 style="margin:0 0 8px; font-size: 15px;">Tombol Kecil yang Gemas</h2>
+          <div class="row" style="margin-bottom:10px;">
+            <button class="btn" id="btnCompliment">✨ Pujian Random</button>
+            <button class="btn" id="btnHug">🤗 Peluk Virtual</button>
+            <button class="btn" id="btnWish">🌟 Make a Wish</button>
+          </div>
+          <p style="margin:0; font-size: 12px; color: var(--muted);">Yang ini buat bikin ketawa. Aman, tidak gigit 😇</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Modal: Edit message -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Edit pesan">
+      <header>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <h3>✍️ Edit Pesan Ulang Tahun</h3>
+          <button class="btn" id="btnCloseModal">Tutup</button>
+        </div>
+      </header>
+      <div class="content">
+        <p>Tulis beberapa baris pesan (1 baris = 1 bubble). Kamu bisa pakai <span style="font-family:var(--mono)">[nama]</span> untuk memanggil namanya otomatis.</p>
+        <textarea id="messageEditor"></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn" id="btnReset">↩️ Reset</button>
+        <button class="btn primary" id="btnSave">💾 Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Helpers ----------
+    const $ = (q) => document.querySelector(q);
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    // ---------- Date text ----------
+    const now = new Date();
+    const dateFmt = new Intl.DateTimeFormat('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    $('#dateText').textContent = dateFmt.format(now);
+
+    // ---------- Message system ----------
+    const defaultLines = [
+      'Selamat ulang tahun, [nama]! 🎂',
+      'Semoga hari ini selembut pelukanku (yang virtual dulu ya 🤭).',
+      'Aku bangga sama kamu. Beneran. ✨',
+      'Semoga semua yang kamu doakan satu per satu nyampe.',
+      'Kalau capek, istirahat. Kalau sedih, sini—kita ketawa bareng.',
+      'Dan kalau kamu lupa… kamu itu berharga banget buat aku. 💖',
+      'Oke, sekarang klik-klik layar ya. Ada hati-hati kecil buat kamu 😘'
+    ];
+
+    let lines = load('lines') || defaultLines.slice();
+    let name = load('name') || 'Sayang';
+    let score = Number(load('score') || 0);
+
+    const nameEl = $('#name');
+    const scoreEl = $('#score');
+    const chatEl = $('#chat');
+    const barEl = $('#bar');
+    const modeText = $('#modeText');
+    const linePreview = $('#linePreview');
+
+    nameEl.textContent = name;
+    scoreEl.textContent = String(score);
+
+    function renderPreview(){
+      const first = (lines[0] || defaultLines[0]).replaceAll('[nama]', name);
+      const short = first.length > 44 ? first.slice(0, 44) + '…' : first;
+      linePreview.textContent = '"' + short + '"';
+    }
+    renderPreview();
+
+    function save(key, val){ localStorage.setItem('bday_'+key, JSON.stringify(val)); }
+    function load(key){
+      try{ const v = localStorage.getItem('bday_'+key); return v ? JSON.parse(v) : null; }
+      catch{ return null; }
+    }
+
+    // ---------- Cute random actions ----------
+    const compliments = [
+      'Kamu itu kayak Wi-Fi… bikin aku selalu pengin dekat. 📶💖',
+      'Kalau kamu bintang, aku rela begadang tiap malam. ⭐',
+      'Senyummu tuh… ilegal. Terlalu manis. 🚨🍯',
+      'Kamu bikin dunia rasanya lebih ringan. ☁️',
+      'Aku nggak butuh GPS kalau ada kamu (tapi kalau nyasar, kita makan dulu). 🧭🍜'
+    ];
+
+    const hugs = [
+      '🤗 *peluk 3 detik* … eh jadi 30 detik.',
+      '🤗 Peluk mode: “aku kangen banget” diaktifkan.',
+      '🤗 Peluk + usap kepala + bilang “kamu hebat”.'
+    ];
+
+    const wishes = [
+      '🌟 Make a wish… (aku diam-diam mendoakan kamu juga).',
+      '🌟 Semoga tahun ini kamu lebih bahagia daripada notifikasi “saldo masuk”.',
+      '🌟 Semoga yang baik datangnya gampang, yang buruk nyangkut di macet. (Eh jangan ya 😅)'
+    ];
+
+    $('#btnCompliment').addEventListener('click', () => appendChat('✨ ' + pick(compliments)));
+    $('#btnHug').addEventListener('click', () => appendChat(pick(hugs)));
+    $('#btnWish').addEventListener('click', () => appendChat(pick(wishes)));
+
+    // ---------- Name input ----------
+    $('#nameInput').value = name;
+    $('#btnSetName').addEventListener('click', () => {
+      const v = $('#nameInput').value.trim();
+      if(!v) return wiggle($('#nameInput'));
+      name = v.slice(0,24);
+      nameEl.textContent = name;
+      save('name', name);
+      renderPreview();
+      sparkleBurst();
+      appendChat('💖 Oke! Mulai sekarang aku panggil: ' + name + ' 😚');
+    });
+
+    function wiggle(el){
+      el.animate([
+        {transform:'translateX(0)'},{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}
+      ], {duration:240, easing:'ease-in-out'});
+      el.focus();
+    }
+
+    // ---------- Chat + celebrate sequence ----------
+    let running = false;
+
+    function appendChat(text){
+      const t = text.replaceAll('[nama]', name);
+      const prev = chatEl.textContent === '(klik Rayakan untuk mulai~)' ? '' : chatEl.textContent + '\n';
+      chatEl.textContent = prev + t;
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    async function celebrate(){
+      if(running) return;
+      running = true;
+      modeText.textContent = pick(['Gemes','Manis','Kangen','Hepi','Sok Cool 😎']);
+      chatEl.textContent = '';
+      barEl.style.width = '0%';
+
+      makeConfetti(170);
+      sparkleBurst();
+
+      for(let i=0;i<lines.length;i++){
+        appendChat('💬 ' + lines[i]);
+        barEl.style.width = Math.round(((i+1)/lines.length)*100) + '%';
+        await sleep(650);
+      }
+
+      appendChat('🎉 ' + name + ', you did it! Ambil peluk virtual lagi: 🤗');
+      running = false;
+    }
+
+    function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+    $('#btnCelebrate').addEventListener('click', celebrate);
+
+    // ---------- Modal editor ----------
+    const modal = $('#modalBackdrop');
+    const editor = $('#messageEditor');
+
+    function openModal(){
+      editor.value = (lines || defaultLines).join('\n');
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+      editor.focus();
+    }
+    function closeModal(){
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    $('#btnEdit').addEventListener('click', openModal);
+    $('#btnCloseModal').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+    $('#btnSave').addEventListener('click', ()=>{
+      const raw = editor.value.split('\n').map(s=>s.trim()).filter(Boolean);
+      if(raw.length === 0){
+        editor.value = defaultLines.join('\n');
+        return;
+      }
+      lines = raw.slice(0, 30);
+      save('lines', lines);
+      renderPreview();
+      closeModal();
+      appendChat('💾 Pesan tersimpan! Klik Rayakan lagi ya 😉');
+      sparkleBurst();
+    });
+
+    $('#btnReset').addEventListener('click', ()=>{
+      lines = defaultLines.slice();
+      save('lines', lines);
+      editor.value = lines.join('\n');
+      renderPreview();
+      appendChat('↩️ Pesan di-reset ke default.');
+    });
+
+    // ---------- Keyboard shortcuts ----------
+    window.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase()==='r') celebrate();
+      if(e.key.toLowerCase()==='m') toggleMusic();
+      if(e.key === 'Escape') closeModal();
+    });
+
+    // ---------- Confetti ----------
+    function makeConfetti(n=120){
+      const host = $('#confetti');
+      const colors = ['#ec4899','#8b5cf6','#38bdf8','#f59e0b','#84cc16','#fb7185','#a78bfa'];
+      for(let i=0;i<n;i++){
+        const d = document.createElement('div');
+        d.className = 'confetto';
+        const x = Math.random()*100;
+        const dx = (Math.random()*2-1)*40 + 'vw';
+        const rot = (Math.random()*720-360) + 'deg';
+        const dur = rand(1.8, 3.4);
+        d.style.left = x + 'vw';
+        d.style.top = (-10 - Math.random()*30) + 'vh';
+        d.style.background = pick(colors);
+        d.style.setProperty('--dx', dx);
+        d.style.setProperty('--rot', rot);
+        d.style.animationDuration = dur + 's';
+        d.style.animationDelay = (Math.random()*0.2) + 's';
+        d.style.transform = `translate3d(0,0,0) rotate(${rot})`;
+        host.appendChild(d);
+        setTimeout(()=>d.remove(), (dur+0.6)*1000);
+      }
+    }
+
+    // ---------- Music (tiny synth) ----------
+    let audioCtx = null;
+    let musicOn = false;
+    let musicTimer = null;
+
+    const melody = [
+      // a cute looping pattern (notes are semitone offsets from A4)
+      [0, 220], [4, 220], [7, 220], [12, 360],
+      [12, 180], [7, 220], [4, 220], [0, 360],
+      [2, 220], [5, 220], [9, 220], [14, 360],
+      [14, 180], [9, 220], [5, 220], [2, 360],
+    ];
+
+    function noteFreq(semitone){
+      return 440 * Math.pow(2, semitone/12);
+    }
+
+    function pluck(freq, ms){
+      if(!audioCtx) return;
+      const t = audioCtx.currentTime;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      const f = audioCtx.createBiquadFilter();
+
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(freq, t);
+
+      f.type = 'lowpass';
+      f.frequency.setValueAtTime(1600, t);
+
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.22, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + ms/1000);
+
+      o.connect(f); f.connect(g); g.connect(audioCtx.destination);
+      o.start(t);
+      o.stop(t + ms/1000 + 0.02);
+    }
+
+    function startMusic(){
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let i = 0;
+      musicTimer = setInterval(()=>{
+        const [semi, dur] = melody[i % melody.length];
+        pluck(noteFreq(semi), dur);
+        i++;
+      }, 240);
+    }
+
+    function stopMusic(){
+      if(musicTimer){ clearInterval(musicTimer); musicTimer = null; }
+    }
+
+    function toggleMusic(){
+      musicOn = !musicOn;
+      $('#musicLabel').textContent = musicOn ? 'ON' : 'OFF';
+      if(musicOn){ startMusic(); sparkleBurst(); }
+      else{ stopMusic(); }
+      save('musicOn', musicOn);
+    }
+
+    $('#btnMusic').addEventListener('click', toggleMusic);
+
+    // restore music preference (off by default)
+    const prevMusic = load('musicOn');
+    if(prevMusic){
+      // do not auto-play; show ON only after user gesture to satisfy browser policies
+      $('#musicLabel').textContent = 'OFF';
+      musicOn = false;
+      save('musicOn', false);
+    }
+
+    // ---------- Canvas interactive scene ----------
+    const canvas = $('#c');
+    const ctx = canvas.getContext('2d');
+
+    function fit(){
+      // keep internal resolution crisp
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+    }
+    window.addEventListener('resize', fit);
+    fit();
+
+    let trailOn = true;
+    let balloonsOn = true;
+
+    const hearts = [];
+    const sparkles = [];
+    const balloons = [];
+
+    function spawnBalloon(){
+      const w = canvas.width, h = canvas.height;
+      const x = rand(w*0.2, w*0.85);
+      const y = rand(h*0.45, h*0.88);
+      balloons.push({
+        x, y,
+        r: rand(22, 34),
+        vx: rand(-0.3, 0.3),
+        vy: rand(-0.25, 0.18),
+        hue: rand(310, 360),
+        grabbed:false,
+        dx:0, dy:0,
+        wobble: rand(0, Math.PI*2)
+      });
+    }
+
+    for(let i=0;i<5;i++) spawnBalloon();
+
+    function heartAt(x,y, big=false){
+      hearts.push({x,y, a:1, s: big? rand(22, 34) : rand(12, 20), vy: rand(-0.9,-0.25), vx: rand(-0.35,0.35), rot: rand(-0.6,0.6), vr: rand(-0.05,0.05)});
+      if(big){ score += 5; } else { score += 1; }
+      scoreEl.textContent = String(score);
+      save('score', score);
+      renderPreview();
+    }
+
+    function sparkleBurst(x = canvas.width*0.5, y = canvas.height*0.32){
+      for(let i=0;i<16;i++){
+        sparkles.push({
+          x, y,
+          vx: Math.cos(i/16*Math.PI*2) * rand(0.7, 1.8),
+          vy: Math.sin(i/16*Math.PI*2) * rand(0.7, 1.8),
+          a: 1,
+          r: rand(1.5, 3.2)
+        });
+      }
+    }
+
+    // toggles
+    function setToggle(elDot, on){
+      elDot.classList.toggle('off', !on);
+    }
+    setToggle($('#trailDot'), trailOn);
+    setToggle($('#balloonDot'), balloonsOn);
+
+    function toggleTrail(){ trailOn = !trailOn; setToggle($('#trailDot'), trailOn); }
+    function toggleBalloons(){
+      balloonsOn = !balloonsOn;
+      setToggle($('#balloonDot'), balloonsOn);
+      if(balloonsOn && balloons.length<3){ for(let i=0;i<3;i++) spawnBalloon(); }
+    }
+
+    $('#toggleTrail').addEventListener('click', toggleTrail);
+    $('#toggleBalloons').addEventListener('click', toggleBalloons);
+    $('#toggleTrail').addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') toggleTrail(); });
+    $('#toggleBalloons').addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') toggleBalloons(); });
+
+    // pointer events
+    const pointer = {x:0,y:0, down:false};
+    let grabbedBalloon = null;
+
+    function toCanvasPos(e){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = canvas.width / rect.width;
+      return {
+        x: (e.clientX - rect.left) * dpr,
+        y: (e.clientY - rect.top) * dpr
+      };
+    }
+
+    canvas.addEventListener('pointerdown', (e)=>{
+      canvas.setPointerCapture(e.pointerId);
+      pointer.down = true;
+      const p = toCanvasPos(e);
+      pointer.x = p.x; pointer.y = p.y;
+
+      // check balloon grab
+      if(balloonsOn){
+        for(let i=balloons.length-1;i>=0;i--){
+          const b = balloons[i];
+          const d = Math.hypot(p.x-b.x, p.y-b.y);
+          if(d < b.r*1.15){
+            b.grabbed = true;
+            b.dx = p.x - b.x;
+            b.dy = p.y - b.y;
+            grabbedBalloon = b;
+            sparkleBurst(b.x, b.y);
+            return;
+          }
+        }
+      }
+
+      heartAt(p.x, p.y, true);
+      makeConfetti(18);
+    });
+
+    canvas.addEventListener('pointermove', (e)=>{
+      const p = toCanvasPos(e);
+      pointer.x = p.x; pointer.y = p.y;
+      if(pointer.down && grabbedBalloon){
+        grabbedBalloon.x = p.x - grabbedBalloon.dx;
+        grabbedBalloon.y = p.y - grabbedBalloon.dy;
+      }
+      if(trailOn){
+        // spawn small hearts along the path
+        if(Math.random() < 0.45) heartAt(p.x + rand(-6,6), p.y + rand(-6,6), false);
+      }
+    });
+
+    canvas.addEventListener('pointerup', ()=>{
+      pointer.down = false;
+      if(grabbedBalloon){
+        grabbedBalloon.grabbed = false;
+        grabbedBalloon.vx += rand(-0.6, 0.6);
+        grabbedBalloon.vy += rand(-0.5, 0.5);
+      }
+      grabbedBalloon = null;
+    });
+
+    // draw helpers
+    function drawHeart(x,y,s,rot,a){
+      ctx.save();
+      ctx.translate(x,y);
+      ctx.rotate(rot);
+      ctx.globalAlpha = a;
+      ctx.beginPath();
+      const k = s/18;
+      ctx.moveTo(0, 6*k);
+      ctx.bezierCurveTo(0, -6*k, -18*k, -6*k, -18*k, 6*k);
+      ctx.bezierCurveTo(-18*k, 18*k, 0, 20*k, 0, 32*k);
+      ctx.bezierCurveTo(0, 20*k, 18*k, 18*k, 18*k, 6*k);
+      ctx.bezierCurveTo(18*k, -6*k, 0, -6*k, 0, 6*k);
+      ctx.closePath();
+
+      const grad = ctx.createLinearGradient(-18*k, -6*k, 18*k, 32*k);
+      grad.addColorStop(0, 'rgba(236,72,153,1)');
+      grad.addColorStop(1, 'rgba(139,92,246,1)');
+      ctx.fillStyle = grad;
+      ctx.shadowColor = 'rgba(236,72,153,.25)';
+      ctx.shadowBlur = 18*k;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawBalloon(b){
+      const {x,y,r,hue} = b;
+      ctx.save();
+      ctx.translate(x,y);
+      // balloon body
+      ctx.beginPath();
+      ctx.ellipse(0, 0, r*0.9, r*1.15, 0, 0, Math.PI*2);
+      const grad = ctx.createRadialGradient(-r*0.25,-r*0.35, r*0.2, 0,0, r*1.3);
+      grad.addColorStop(0, `hsla(${hue}, 90%, 70%, 1)`);
+      grad.addColorStop(1, `hsla(${hue-30}, 90%, 55%, 1)`);
+      ctx.fillStyle = grad;
+      ctx.shadowColor = 'rgba(0,0,0,.12)';
+      ctx.shadowBlur = 18;
+      ctx.fill();
+
+      // highlight
+      ctx.beginPath();
+      ctx.ellipse(-r*0.25, -r*0.35, r*0.16, r*0.32, -0.25, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.fill();
+
+      // knot
+      ctx.beginPath();
+      ctx.moveTo(0, r*1.15);
+      ctx.lineTo(-r*0.18, r*1.35);
+      ctx.lineTo(r*0.18, r*1.35);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(17,24,39,.18)';
+      ctx.fill();
+
+      // string
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(17,24,39,.35)';
+      ctx.lineWidth = 2;
+      ctx.moveTo(0, r*1.35);
+      const sway = Math.sin(b.wobble) * r*0.4;
+      ctx.quadraticCurveTo(sway, r*2.2, -sway*0.5, r*3.3);
+      ctx.stroke();
+
+      // tiny face :)
+      ctx.fillStyle = 'rgba(17,24,39,.5)';
+      ctx.beginPath(); ctx.arc(-r*0.22, -r*0.05, 2.6, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(r*0.22, -r*0.05, 2.6, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(17,24,39,.45)';
+      ctx.lineWidth = 2;
+      ctx.arc(0, r*0.18, r*0.22, 0, Math.PI);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawCake(){
+      const w = canvas.width, h = canvas.height;
+      const cx = w*0.5, cy = h*0.78;
+
+      // plate shadow
+      ctx.save();
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy+26, w*0.20, 18, 0, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,0,0,.10)';
+      ctx.fill();
+
+      // cake base
+      ctx.beginPath();
+      ctx.roundRect(cx - w*0.16, cy - 62, w*0.32, 98, 18);
+      const g1 = ctx.createLinearGradient(cx, cy-70, cx, cy+50);
+      g1.addColorStop(0, 'rgba(255,255,255,.95)');
+      g1.addColorStop(1, 'rgba(255,255,255,.70)');
+      ctx.fillStyle = g1;
+      ctx.shadowColor = 'rgba(0,0,0,.10)';
+      ctx.shadowBlur = 22;
+      ctx.fill();
+
+      // icing drip
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      const topY = cy - 62;
+      ctx.moveTo(cx - w*0.16, topY+18);
+      const dripCount = 7;
+      for(let i=0;i<=dripCount;i++){
+        const x = cx - w*0.16 + (w*0.32)*(i/dripCount);
+        const y = topY + 18 + Math.sin(i*1.7)*10 + (i%2?14:0);
+        ctx.quadraticCurveTo(x, y, x, topY+18);
+      }
+      ctx.lineTo(cx + w*0.16, topY+18);
+      ctx.lineTo(cx + w*0.16, topY);
+      ctx.lineTo(cx - w*0.16, topY);
+      ctx.closePath();
+      const g2 = ctx.createLinearGradient(cx-w*0.16, topY, cx+w*0.16, topY+40);
+      g2.addColorStop(0, 'rgba(236,72,153,.85)');
+      g2.addColorStop(1, 'rgba(139,92,246,.75)');
+      ctx.fillStyle = g2;
+      ctx.fill();
+
+      // candle
+      ctx.beginPath();
+      ctx.roundRect(cx-8, topY-44, 16, 44, 8);
+      ctx.fillStyle = 'rgba(56,189,248,.85)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(cx, topY-52);
+      ctx.quadraticCurveTo(cx+10, topY-40, cx, topY-28);
+      ctx.quadraticCurveTo(cx-10, topY-40, cx, topY-52);
+      const flame = ctx.createRadialGradient(cx, topY-40, 2, cx, topY-40, 16);
+      flame.addColorStop(0,'rgba(255,255,255,.95)');
+      flame.addColorStop(0.35,'rgba(245,158,11,.95)');
+      flame.addColorStop(1,'rgba(245,158,11,0)');
+      ctx.fillStyle = flame;
+      ctx.fill();
+
+      // text
+      ctx.font = `700 ${Math.round(w*0.03)}px ${getComputedStyle(document.documentElement).getPropertyValue('--sans')}`;
+      ctx.fillStyle = 'rgba(17,24,39,.78)';
+      ctx.textAlign = 'center';
+      ctx.fillText('HBD ' + name + '!', cx, cy - 8);
+
+      ctx.restore();
+    }
+
+    // polyfill for roundRect (older browsers)
+    if(!CanvasRenderingContext2D.prototype.roundRect){
+      CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+        r = Math.min(r, w/2, h/2);
+        this.beginPath();
+        this.moveTo(x+r, y);
+        this.arcTo(x+w, y, x+w, y+h, r);
+        this.arcTo(x+w, y+h, x, y+h, r);
+        this.arcTo(x, y+h, x, y, r);
+        this.arcTo(x, y, x+w, y, r);
+        this.closePath();
+        return this;
+      }
+    }
+
+    // animation loop
+    function tick(){
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0,0,w,h);
+
+      // background sparkle dust
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      for(let i=0;i<20;i++){
+        const x = (Math.sin((Date.now()/1200)+i)*0.5+0.5)*w;
+        const y = (Math.cos((Date.now()/1500)+i*1.7)*0.5+0.5)*h*0.6;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.2, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,.8)';
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // cake
+      drawCake();
+
+      // balloons
+      if(balloonsOn){
+        for(const b of balloons){
+          if(!b.grabbed){
+            b.x += b.vx; b.y += b.vy;
+            b.wobble += 0.03;
+            // gentle float bounds
+            b.x = clamp(b.x, w*0.08, w*0.92);
+            b.y = clamp(b.y, h*0.10, h*0.92);
+            // bounce
+            if(b.x<=w*0.08 || b.x>=w*0.92) b.vx *= -1;
+            if(b.y<=h*0.10 || b.y>=h*0.92) b.vy *= -1;
+            // drift up a bit
+            b.vy -= 0.003;
+            b.vy = clamp(b.vy, -0.35, 0.25);
+          }
+          drawBalloon(b);
+        }
+      }
+
+      // hearts
+      for(let i=hearts.length-1;i>=0;i--){
+        const ht = hearts[i];
+        ht.x += ht.vx;
+        ht.y += ht.vy;
+        ht.rot += ht.vr;
+        ht.a -= 0.012;
+        drawHeart(ht.x, ht.y, ht.s, ht.rot, clamp(ht.a,0,1));
+        if(ht.a <= 0) hearts.splice(i,1);
+      }
+
+      // sparkles
+      for(let i=sparkles.length-1;i>=0;i--){
+        const s = sparkles[i];
+        s.x += s.vx; s.y += s.vy;
+        s.vx *= 0.96; s.vy *= 0.96;
+        s.a -= 0.03;
+        ctx.save();
+        ctx.globalAlpha = clamp(s.a,0,1);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,.95)';
+        ctx.shadowColor = 'rgba(56,189,248,.35)';
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.restore();
+        if(s.a<=0) sparkles.splice(i,1);
+      }
+
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // ---------- Small onboarding sparkle ----------
+    setTimeout(()=>sparkleBurst(canvas.width*0.5, canvas.height*0.22), 450);
+
+    // ---------- Little tip fade ----------
+    setTimeout(()=>{
+      $('#tip').animate([{opacity:1},{opacity:0}], {duration:1200, fill:'forwards'});
+    }, 6500);
+
+    // ---------- Score pill pulse ----------
+    const scorePill = $('#scorePill');
+    const orig = score;
+    setInterval(()=>{
+      if(score !== orig){
+        scorePill.animate([
+          {transform:'scale(1)'}, {transform:'scale(1.03)'}, {transform:'scale(1)'}
+        ], {duration:420, easing:'ease-out'});
+      }
+    }, 1400);
+
+    // ---------- Start with a friendly line ----------
+    setTimeout(()=>{
+      appendChat('👋 Hai ' + name + '! Klik Rayakan kalau kamu siap~');
+    }, 400);
+  </script>
+</body>
+</html>
