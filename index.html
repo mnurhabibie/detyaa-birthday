@@ -19,14 +19,10 @@
       background: radial-gradient(1200px 700px at 50% 30%, var(--sky3), var(--sky2) 45%, var(--sky1) 100%);
     }
 
-    /* Stars */
     .stars, .stars::before, .stars::after{
-      position:absolute; inset:0;
-      content:"";
-      background-repeat: repeat;
-      background-size: 220px 220px;
-      opacity:.55;
-      pointer-events:none;
+      position:absolute; inset:0; content:"";
+      background-repeat: repeat; background-size: 220px 220px;
+      opacity:.55; pointer-events:none;
       filter: drop-shadow(0 0 2px rgba(255,255,255,.15));
     }
     .stars{
@@ -58,34 +54,25 @@
     #wrap{position:relative; height:100%; width:100%}
     canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 
-    /* Ground / hills */
     .ground{
-      position:absolute; left:0; right:0; bottom:0;
-      height:38vh;
+      position:absolute; left:0; right:0; bottom:0; height:38vh;
       background:
         radial-gradient(900px 220px at 50% 10%, rgba(255,204,102,.06), transparent 60%),
         linear-gradient(to top, #04060a 0%, #060a12 45%, rgba(0,0,0,0) 100%);
       pointer-events:none;
     }
     .hills{
-      position:absolute; left:-10vw; right:-10vw; bottom:10vh;
-      height:22vh;
+      position:absolute; left:-10vw; right:-10vw; bottom:10vh; height:22vh;
       background:
         radial-gradient(60% 120% at 20% 100%, #060a12 60%, transparent 61%),
         radial-gradient(60% 120% at 55% 100%, #070b14 60%, transparent 61%),
         radial-gradient(60% 120% at 85% 100%, #050910 60%, transparent 61%);
-      opacity:.95;
-      pointer-events:none;
+      opacity:.95; pointer-events:none;
     }
 
-    /* Village silhouettes */
     .village{
-      position:absolute; left:50%; bottom:14vh;
-      transform: translateX(-50%);
-      width:min(980px, 92vw);
-      height:22vh;
-      pointer-events:none;
-      opacity:.95;
+      position:absolute; left:50%; bottom:14vh; transform: translateX(-50%);
+      width:min(980px, 92vw); height:22vh; pointer-events:none; opacity:.95;
     }
     .hut{
       position:absolute; bottom:0;
@@ -117,11 +104,7 @@
       65%{filter:brightness(.92);opacity:.85}
     }
 
-    /* Candles field */
-    .candles{
-      position:absolute; left:0; right:0; bottom:0;
-      height:18vh; pointer-events:none; overflow:hidden;
-    }
+    .candles{ position:absolute; left:0; right:0; bottom:0; height:18vh; pointer-events:none; overflow:hidden; }
     .candle{
       position:absolute; bottom:3vh;
       width:10px; height:28px;
@@ -151,7 +134,6 @@
       50%{ transform: translateX(-50%) rotate(-6deg) scale(1.07) }
     }
 
-    /* UI */
     .ui{
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
@@ -159,7 +141,7 @@
     }
     .panel{
       pointer-events:auto;
-      width:min(780px, 92vw);
+      width:min(820px, 92vw);
       padding:18px 18px 16px;
       border-radius:18px;
       background: rgba(10,14,28,.55);
@@ -168,25 +150,12 @@
       box-shadow:0 18px 60px rgba(0,0,0,.35);
       text-align:center;
     }
-    .title{
-      font-size: clamp(18px, 2.4vw, 26px);
-      letter-spacing:.4px;
-      margin:2px 0 6px;
-    }
-    .subtitle{
-      margin:0 0 14px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.35;
-    }
+    .title{ font-size: clamp(18px, 2.4vw, 26px); letter-spacing:.4px; margin:2px 0 6px; }
+    .subtitle{ margin:0 0 14px; color:var(--muted); font-size:14px; line-height:1.35; }
     .row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
     button{
-      appearance:none;
-      border:none;
-      border-radius:14px;
-      padding:12px 16px;
-      font-weight:650;
-      cursor:pointer;
+      appearance:none; border:none; border-radius:14px;
+      padding:12px 16px; font-weight:650; cursor:pointer;
       color:#0b1022;
       background: linear-gradient(180deg, rgba(255,212,138,1), rgba(255,170,70,1));
       box-shadow:0 10px 30px rgba(255,170,70,.18), 0 2px 0 rgba(0,0,0,.25);
@@ -194,17 +163,11 @@
     }
     button:hover{ transform: translateY(-1px); filter: brightness(1.04); }
     button:active{ transform: translateY(1px); }
-    .ghost{
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow:none;
-    }
+    .ghost{ background: rgba(255,255,255,.08); color: var(--text); border: 1px solid rgba(255,255,255,.14); box-shadow:none; }
     .color-btn{ padding:10px 12px; border-radius:999px; }
     .color-btn.active{ outline:2px solid rgba(255,255,255,.65); outline-offset:2px; }
     .hint{ margin-top:10px; font-size:12px; color:rgba(243,245,255,.65); }
 
-    /* Reduce motion */
     @media (prefers-reduced-motion: reduce){
       .stars, .stars::before, .stars::after, .hut .window, .candle::before{ animation:none !important; }
       button{ transition:none !important; }
@@ -212,43 +175,34 @@
   </style>
 </head>
 <body>
-  <div id="wrap" aria-label="Malam pedesaan dengan lilin dan kembang api">
+  <div id="wrap">
     <div class="stars" aria-hidden="true"></div>
-
     <canvas id="fx"></canvas>
 
     <div class="hills" aria-hidden="true"></div>
     <div class="ground" aria-hidden="true"></div>
 
     <div class="village" aria-hidden="true">
-      <div class="hut" style="left:6%; height:44%; width:18%;">
-        <div class="window"></div><div class="window w2"></div>
-      </div>
-      <div class="hut" style="left:28%; height:52%; width:20%;">
-        <div class="window"></div><div class="window w2"></div>
-      </div>
-      <div class="hut" style="left:53%; height:46%; width:19%;">
-        <div class="window"></div><div class="window w2"></div>
-      </div>
-      <div class="hut" style="left:76%; height:50%; width:20%;">
-        <div class="window"></div><div class="window w2"></div>
-      </div>
+      <div class="hut" style="left:6%; height:44%; width:18%;"><div class="window"></div><div class="window w2"></div></div>
+      <div class="hut" style="left:28%; height:52%; width:20%;"><div class="window"></div><div class="window w2"></div></div>
+      <div class="hut" style="left:53%; height:46%; width:19%;"><div class="window"></div><div class="window w2"></div></div>
+      <div class="hut" style="left:76%; height:50%; width:20%;"><div class="window"></div><div class="window w2"></div></div>
     </div>
 
     <div class="candles" id="candles" aria-hidden="true"></div>
 
     <div class="ui">
       <div class="panel">
-        <div class="title">Malam Pedesaan • Cahaya Lilin • Kembang Api</div>
+        <div class="title">Malam Pedesaan • Lilin • Kembang Api</div>
         <p class="subtitle">
-          Tekan <b>🔥 Api</b> untuk menembakkan roket. Saat meledak, muncul ledakan <b>multi-warna (gradasi)</b>
-          dan tulisan kembang api: <b>“Selamat Ulang Tahun Detya”</b>.
+          Ledakan <b>multi-warna (gradasi)</b> + tulisan kembang api <b>“Selamat Ulang Tahun Detya”</b>.
+          Klik langit untuk arahkan roket.
         </p>
 
         <div class="row">
-          <button id="btnFire" title="Nyalakan kembang api (Space/Enter juga bisa)">🔥 Api</button>
-          <button id="btnBurst" class="ghost" title="Ledakkan di posisi acak">✨ Meledak Sekarang</button>
-          <button id="btnClear" class="ghost" title="Bersihkan efek">🧹 Bersihkan</button>
+          <button id="btnFire">🔥 Api</button>
+          <button id="btnBurst" class="ghost">✨ Meledak Sekarang</button>
+          <button id="btnClear" class="ghost">🧹 Bersihkan</button>
         </div>
 
         <div class="row" style="margin-top:10px">
@@ -259,13 +213,13 @@
           <button class="ghost color-btn" data-scheme="random">🌈 Acak</button>
         </div>
 
-        <div class="hint">Tips: klik/ketuk di langit untuk menentukan titik ledakan. Tombol keyboard: Space/Enter = Api, C = Bersihkan.</div>
+        <div class="hint">Keyboard: Space/Enter = Api, C = Bersihkan.</div>
       </div>
     </div>
   </div>
 
   <script>
-    // ===== Candles generation =====
+    // ===== Candles =====
     const candlesEl = document.getElementById("candles");
     const candleCount = 26;
     function seedCandles(){
@@ -283,174 +237,70 @@
       }
     }
     seedCandles();
-    window.addEventListener("resize", seedCandles);
+    addEventListener("resize", seedCandles);
 
-    // ===== Fireworks canvas =====
+    // ===== Canvas sharpness (DPR) =====
     const canvas = document.getElementById("fx");
-    const ctx = canvas.getContext("2d", { alpha: true });
+    const ctx = canvas.getContext("2d", { alpha:true });
 
+    let dpr = 1;
     function resize(){
-      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      dpr = Math.max(1, Math.min(2, devicePixelRatio || 1)); // cap for performance
       canvas.width = Math.floor(innerWidth * dpr);
       canvas.height = Math.floor(innerHeight * dpr);
       canvas.style.width = innerWidth + "px";
       canvas.style.height = innerHeight + "px";
-      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.setTransform(dpr,0,0,dpr,0,0); // draw in CSS pixels
+      // hard clear
+      ctx.fillStyle = "rgba(0,0,0,1)";
+      ctx.fillRect(0,0,innerWidth,innerHeight);
     }
     resize();
-    window.addEventListener("resize", resize);
+    addEventListener("resize", resize);
 
-    function rand(min,max){ return Math.random()*(max-min)+min; }
-    function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+    // ===== Utils =====
+    const rand = (a,b)=> Math.random()*(b-a)+a;
+    const clamp = (v,a,b)=> Math.max(a, Math.min(b,v));
 
-    // ===== Color schemes (multi-color gradient / palette) =====
+    // ===== Color gradient schemes =====
     let colorScheme = "gold";
     const schemes = {
-      gold:   { hues:[38, 44, 50, 32, 58] },
-      sunset: { hues:[8, 22, 34, 300, 46] },     // merah-oranye-emas + sedikit pink
-      neon:   { hues:[120, 150, 190, 300, 30] }, // hijau neon + cyan + ungu + emas
-      ocean:  { hues:[195, 210, 230, 260, 180] } // biru-laut sampai ungu
+      gold:   [38, 44, 50, 32, 58],
+      sunset: [6, 18, 34, 315, 48],
+      neon:   [120, 155, 190, 300, 30],
+      ocean:  [195, 210, 232, 260, 180]
     };
     function pickHue(i, total){
       if (colorScheme === "random") return rand(0,360);
-      const base = schemes[colorScheme]?.hues || schemes.gold.hues;
-      // gradasi: campur index + noise kecil supaya terasa "gradient multi warna"
+      const base = schemes[colorScheme] || schemes.gold;
       const h = base[i % base.length];
-      const drift = (i/Math.max(1,total)) * 18;  // shifting hue pelan
-      return (h + drift + rand(-10,10) + 360) % 360;
+      // gradasi halus sepanjang ledakan + sedikit noise
+      const drift = (i/Math.max(1,total)) * 22;
+      return (h + drift + rand(-8,8) + 360) % 360;
     }
 
-    // ===== Entities =====
+    // ===== Particles =====
     const rockets = [];
     const particles = [];
     const grav = 0.055;
 
-    // Particle kinds:
-    // - "spark": titik ledakan
-    // - "text": titik membentuk tulisan (lebih “stabil” biar terbaca)
-    function makeParticle(x,y,vx,vy,r,lifeMax,hue,kind="spark",sparkle=false){
-      return { x,y,vx,vy,r, life:0, max:lifeMax, hue, kind, sparkle };
+    function makeParticle(x,y,vx,vy,r,max,hue,kind="spark",sparkle=false){
+      return {x,y,vx,vy,r,life:0,max,hue,kind,sparkle};
     }
 
-    // ===== Rocket & Burst =====
-    function launchRocket(targetX, targetY){
-      const startX = rand(innerWidth*0.2, innerWidth*0.8);
-      const startY = innerHeight + 12;
+    function launchRocket(tx, ty){
+      const sx = rand(innerWidth*0.2, innerWidth*0.8);
+      const sy = innerHeight + 12;
       rockets.push({
-        x:startX, y:startY,
-        vx:(targetX - startX)/55,
-        vy:(targetY - startY)/55,
-        targetX, targetY,
+        x:sx, y:sy,
+        vx:(tx - sx)/55,
+        vy:(ty - sy)/55,
+        tx, ty,
         life:0,
         trail:[]
       });
     }
 
-    function burstMulti(x,y){
-      const count = Math.floor(rand(90, 140));
-      for (let i=0; i<count; i++){
-        const a = (Math.PI*2) * (i/count) + rand(-0.12,0.12);
-        const sp = rand(1.2, 4.9);
-        const hue = pickHue(i, count);
-
-        particles.push(makeParticle(
-          x, y,
-          Math.cos(a)*sp,
-          Math.sin(a)*sp,
-          rand(1.2, 2.6),
-          rand(50, 90),
-          hue,
-          "spark",
-          Math.random() < 0.22
-        ));
-      }
-      // Glitter core
-      for (let i=0; i<28; i++){
-        particles.push(makeParticle(
-          x, y,
-          rand(-1.4,1.4),
-          rand(-1.4,1.4),
-          rand(1.0, 2.2),
-          rand(28, 50),
-          pickHue(i, 28),
-          "spark",
-          true
-        ));
-      }
-    }
-
-    // ===== Text Fireworks (particles forming text) =====
-    const off = document.createElement("canvas");
-    const offCtx = off.getContext("2d", { willReadFrequently:true });
-
-    function textBurst(x, y, text){
-      // Render text to offscreen canvas and sample pixels
-      const maxW = Math.min(980, innerWidth * 0.92);
-      const fontSize = clamp(Math.floor(innerWidth * 0.055), 28, 62);
-      const padding = 24;
-
-      off.width = Math.floor(maxW);
-      off.height = Math.floor(fontSize * 2.6);
-      offCtx.clearRect(0,0,off.width,off.height);
-
-      offCtx.textAlign = "center";
-      offCtx.textBaseline = "middle";
-      offCtx.fillStyle = "#ffffff";
-
-      // subtle bold for readability
-      offCtx.font = `800 ${fontSize}px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-      offCtx.fillText(text, off.width/2, off.height/2);
-
-      // Create particle positions from pixels
-      const img = offCtx.getImageData(0,0,off.width,off.height).data;
-      const step = clamp(Math.floor(fontSize / 10), 4, 8); // density
-      const points = [];
-
-      for (let yy=0; yy<off.height; yy+=step){
-        for (let xx=0; xx<off.width; xx+=step){
-          const idx = (yy*off.width + xx)*4;
-          const a = img[idx+3];
-          if (a > 120) points.push({xx,yy});
-        }
-      }
-
-      // Center the text around (x,y)
-      const originX = x - off.width/2;
-      const originY = y - off.height/2;
-
-      const total = points.length;
-      for (let i=0; i<total; i++){
-        const p = points[i];
-        const px = originX + p.xx;
-        const py = originY + p.yy;
-
-        // Small outward drift so it "sparkles", but still readable
-        const angle = Math.atan2(py - y, px - x);
-        const sp = rand(0.2, 1.1);
-
-        const hue = pickHue(i, total);
-        particles.push(makeParticle(
-          px, py,
-          Math.cos(angle)*sp,
-          Math.sin(angle)*sp,
-          rand(1.1, 2.0),
-          rand(70, 105),
-          hue,
-          "text",
-          Math.random() < 0.12
-        ));
-      }
-    }
-
-    function megaExplosion(x,y){
-      // 1) ledakan multi-warna
-      burstMulti(x,y);
-      // 2) tulisan dari partikel kembang api (di sekitar titik ledak, agak di bawah)
-      const textY = y + clamp(innerHeight*0.06, 26, 60);
-      textBurst(x, clamp(textY, innerHeight*0.12, innerHeight*0.58), "Selamat Ulang Tahun Detya");
-    }
-
-    // ===== Drawing helpers =====
     function drawGlow(x,y,rad,alpha){
       ctx.save();
       ctx.globalAlpha = alpha;
@@ -465,28 +315,139 @@
       ctx.restore();
     }
 
+    // ===== Offscreen text sampling (cleaner) =====
+    const off = document.createElement("canvas");
+    const offCtx = off.getContext("2d", { willReadFrequently:true });
+
+    function textParticles(x, y, text){
+      const fontSize = clamp(Math.floor(innerWidth * 0.055), 30, 64);
+      const maxW = Math.min(980, innerWidth * 0.92);
+
+      off.width = Math.floor(maxW);
+      off.height = Math.floor(fontSize * 2.4);
+
+      offCtx.clearRect(0,0,off.width,off.height);
+
+      // Outline + fill -> hasil sampling lebih “solid”
+      offCtx.textAlign = "center";
+      offCtx.textBaseline = "middle";
+      offCtx.font = `900 ${fontSize}px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+
+      offCtx.lineWidth = Math.max(6, Math.floor(fontSize * 0.16));
+      offCtx.strokeStyle = "#ffffff";
+      offCtx.strokeText(text, off.width/2, off.height/2);
+
+      offCtx.fillStyle = "#ffffff";
+      offCtx.fillText(text, off.width/2, off.height/2);
+
+      const img = offCtx.getImageData(0,0,off.width,off.height).data;
+
+      // adapt sampling density
+      const step = clamp(Math.floor(fontSize / 12), 3, 7);
+      const thresholdA = 90;
+
+      const points = [];
+      for (let yy=0; yy<off.height; yy+=step){
+        for (let xx=0; xx<off.width; xx+=step){
+          const idx = (yy*off.width + xx) * 4;
+          const a = img[idx+3];
+          if (a > thresholdA) points.push({xx,yy});
+        }
+      }
+
+      // cap points biar performa bagus & tulisan tidak jadi blob
+      const MAX_POINTS = 1400;
+      let picked = points;
+      if (points.length > MAX_POINTS){
+        picked = [];
+        const stride = Math.ceil(points.length / MAX_POINTS);
+        for (let i=0; i<points.length; i+=stride) picked.push(points[i]);
+      }
+
+      const originX = x - off.width/2;
+      const originY = y - off.height/2;
+
+      const total = picked.length;
+      for (let i=0; i<total; i++){
+        const p = picked[i];
+        const px = originX + p.xx;
+        const py = originY + p.yy;
+
+        const angle = Math.atan2(py - y, px - x);
+        const sp = rand(0.05, 0.55); // lebih kecil biar kebaca
+
+        const hue = pickHue(i, total);
+
+        particles.push(makeParticle(
+          px, py,
+          Math.cos(angle)*sp,
+          Math.sin(angle)*sp,
+          rand(1.2, 2.0),
+          rand(88, 120),
+          hue,
+          "text",
+          Math.random() < 0.10
+        ));
+      }
+    }
+
+    function burstMulti(x,y){
+      const count = Math.floor(rand(90, 130));
+      for (let i=0; i<count; i++){
+        const a = (Math.PI*2) * (i/count) + rand(-0.10,0.10);
+        const sp = rand(1.2, 4.8);
+        const hue = pickHue(i, count);
+        particles.push(makeParticle(
+          x, y,
+          Math.cos(a)*sp,
+          Math.sin(a)*sp,
+          rand(1.2, 2.6),
+          rand(55, 95),
+          hue,
+          "spark",
+          Math.random() < 0.22
+        ));
+      }
+      for (let i=0; i<26; i++){
+        particles.push(makeParticle(
+          x, y,
+          rand(-1.2,1.2),
+          rand(-1.2,1.2),
+          rand(1.0, 2.2),
+          rand(30, 55),
+          pickHue(i, 26),
+          "spark",
+          true
+        ));
+      }
+    }
+
+    function megaExplosion(x,y){
+      burstMulti(x,y);
+      const textY = clamp(y + clamp(innerHeight*0.06, 26, 60), innerHeight*0.12, innerHeight*0.58);
+      textParticles(x, textY, "Selamat Ulang Tahun Detya");
+    }
+
     function clearAll(){
       rockets.length = 0;
       particles.length = 0;
-      // hard clear to black (so it really resets)
       ctx.fillStyle = "rgba(0,0,0,1)";
       ctx.fillRect(0,0,innerWidth,innerHeight);
     }
 
-    // ===== Animation loop =====
+    // ===== Animation =====
     let last = performance.now();
     function tick(now){
       const dt = Math.min(2, (now-last)/16.67);
       last = now;
 
-      // Fade for trails
+      // fade for trails
       ctx.fillStyle = "rgba(0,0,0,0.18)";
       ctx.fillRect(0,0,innerWidth,innerHeight);
 
-      // Warm horizon glow
       drawGlow(innerWidth*0.5, innerHeight*0.78, innerWidth*0.55, 0.20);
 
-      // Rockets
+      // rockets
       for (let i=rockets.length-1; i>=0; i--){
         const r = rockets[i];
         r.life += dt;
@@ -519,26 +480,23 @@
         ctx.fill();
         ctx.restore();
 
-        const dx = r.x - r.targetX;
-        const dy = r.y - r.targetY;
+        const dx = r.x - r.tx;
+        const dy = r.y - r.ty;
         if ((dx*dx + dy*dy) < 220 || r.life > 80){
-          megaExplosion(r.targetX, r.targetY);
+          megaExplosion(r.tx, r.ty);
           rockets.splice(i,1);
         }
       }
 
-      // Particles
+      // particles
       for (let i=particles.length-1; i>=0; i--){
         const p = particles[i];
         p.life += dt;
 
-        // physics: text particles fall slower to keep readable
-        const g = (p.kind === "text") ? (grav * 0.35) : grav;
-
+        const g = (p.kind === "text") ? (grav * 0.28) : grav;
         p.vy += g * dt * 16.67;
 
-        // friction: text particles have more damping
-        const damp = (p.kind === "text") ? 0.985 : 0.992;
+        const damp = (p.kind === "text") ? 0.987 : 0.992;
         p.vx *= Math.pow(damp, dt*16.67);
         p.vy *= Math.pow(damp, dt*16.67);
 
@@ -548,24 +506,22 @@
         const t = p.life / p.max;
         const alpha = Math.max(0, 1 - t);
 
-        const sparkleFactor = p.sparkle ? (0.9 + Math.sin(p.life*0.7)*0.18) : 1;
-        const r = p.r * sparkleFactor;
+        const sparkleFactor = p.sparkle ? (0.92 + Math.sin(p.life*0.7)*0.18) : 1;
+        const rr = p.r * sparkleFactor;
 
-        // draw
         ctx.save();
         ctx.globalAlpha = alpha;
 
-        // color + glow
         ctx.fillStyle = `hsla(${p.hue}, 95%, 70%, 1)`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+        ctx.arc(p.x, p.y, rr, 0, Math.PI*2);
         ctx.fill();
 
-        // extra glow for text particles (so letters stand out)
-        const glowMul = (p.kind === "text") ? 1.0 : 0.55;
-        ctx.globalAlpha = alpha * glowMul * 0.55;
+        // extra glow
+        const glow = (p.kind === "text") ? 0.95 : 0.55;
+        ctx.globalAlpha = alpha * glow * 0.55;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r*3.0, 0, Math.PI*2);
+        ctx.arc(p.x, p.y, rr*3.0, 0, Math.PI*2);
         ctx.fillStyle = `hsla(${p.hue}, 95%, 70%, 0.24)`;
         ctx.fill();
 
@@ -577,7 +533,7 @@
       requestAnimationFrame(tick);
     }
 
-    // init
+    // init clear black
     ctx.fillStyle = "rgba(0,0,0,1)";
     ctx.fillRect(0,0,innerWidth,innerHeight);
     requestAnimationFrame(tick);
@@ -592,33 +548,21 @@
       launchRocket(x, ty);
     }
 
-    btnFire.addEventListener("click", ()=>{
-      fireAt(innerWidth*0.5, innerHeight*0.28);
-    });
-
-    btnBurst.addEventListener("click", ()=>{
-      megaExplosion(rand(innerWidth*0.25, innerWidth*0.75), rand(innerHeight*0.14, innerHeight*0.45));
-    });
-
+    btnFire.addEventListener("click", ()=> fireAt(innerWidth*0.5, innerHeight*0.28));
+    btnBurst.addEventListener("click", ()=> megaExplosion(rand(innerWidth*0.25, innerWidth*0.75), rand(innerHeight*0.14, innerHeight*0.45)));
     btnClear.addEventListener("click", clearAll);
 
-    // Click to set target (ignore clicks on buttons)
-    window.addEventListener("pointerdown", (e)=>{
+    addEventListener("pointerdown", (e)=>{
       const path = e.composedPath?.() || [];
       if (path.some(el => el && el.tagName === "BUTTON")) return;
       fireAt(e.clientX, e.clientY);
     });
 
-    // Keyboard
-    window.addEventListener("keydown", (e)=>{
-      if (e.code === "Space" || e.code === "Enter"){
-        e.preventDefault();
-        fireAt(innerWidth*0.5, innerHeight*0.28);
-      }
+    addEventListener("keydown", (e)=>{
+      if (e.code === "Space" || e.code === "Enter"){ e.preventDefault(); fireAt(innerWidth*0.5, innerHeight*0.28); }
       if (e.key.toLowerCase() === "c") clearAll();
     });
 
-    // Color scheme buttons
     document.querySelectorAll(".color-btn").forEach(btn=>{
       btn.addEventListener("click", ()=>{
         colorScheme = btn.dataset.scheme || "gold";
