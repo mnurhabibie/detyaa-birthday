@@ -1,3 +1,5 @@
+console.log("script.js loaded ✅");
+
 // ===== Stars =====
 (function makeStars(){
   const wrap = document.getElementById("stars");
