@@ -333,3 +333,31 @@ h1{
 .card { position: relative; z-index: 10; pointer-events: auto; }
 .flameBtn { pointer-events: auto; }
 
+
+/* --- FIX KLIK: dekorasi jangan menangkap klik --- */
+.scene > .bg,
+.scene > .stars,
+.scene > .moon,
+.scene > .moon-glow,
+.scene > .lanterns,
+.scene > .fx,
+.scene > .hills,
+.scene > .footerGlow {
+  pointer-events: none !important;
+}
+
+/* Pastikan kartu di atas semua */
+.card {
+  position: relative !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+}
+
+/* Tombol pasti bisa diklik */
+.flameBtn {
+  position: relative !important;
+  z-index: 10000 !important;
+  pointer-events: auto !important;
+}
+
+
