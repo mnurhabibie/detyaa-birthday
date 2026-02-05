@@ -316,3 +316,20 @@ h1{
   .star, .lantern{ animation: none !important; }
   .flameBtn{ transition: none; }
 }
+
+/* Biar dekorasi tidak nge-block klik */
+.bg,
+.stars,
+.moon,
+.moon-glow,
+.lanterns,
+.hills,
+.fx,
+.footerGlow{
+  pointer-events: none;
+}
+
+/* Pastikan kartu & tombol tetap bisa diklik */
+.card { position: relative; z-index: 10; pointer-events: auto; }
+.flameBtn { pointer-events: auto; }
+
